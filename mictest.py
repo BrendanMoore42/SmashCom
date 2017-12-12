@@ -1,5 +1,5 @@
 import speech_recognition as sr
-from directkeys import PressKey, ReleaseKey, A, B, X, Y, Z, START, UP, DOWN, LEFT, RIGHT, CUP, CD, CR, CL, L, R, DUP
+from directkeys import *
 import time
 from moves import *
 
@@ -20,7 +20,7 @@ from moves import *
 # except sr.RequestError as e:
 #     print("Could not request results; {0}".format(e))
 
-for i in list(range(2))[::-1]:
+for i in list(range(2))[::-1]:#Counts down from x then executes code
     print (i+1)
     time.sleep(1)
 
@@ -43,7 +43,7 @@ moves = ["jump", "left", "right", "crouch", "down", "up",
 
 def mic_on():
     with sr.Microphone() as source:
-        print ("Holy shit chill calibrating")
+        print ("Chill calibrating")
         r.adjust_for_ambient_noise(source, duration=5)
         print("Say a move:")
         audio = r.listen(source)

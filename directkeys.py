@@ -8,6 +8,7 @@ import time
 
 SendInput = ctypes.windll.user32.SendInput
 
+#Custom Button mapping
 A = 0x1E
 B = 0x30
 X = 0x2D

@@ -6,7 +6,7 @@ import time
 # hold = dash * time
 #
 
-
+#Each function is a macro for a specific move
 def jump():
     PressKey(X)
     ReleaseKey(X)
@@ -17,7 +17,7 @@ def up():
 
 def left():
     PressKey(LEFT)
-    time.sleep(0.5)
+    time.sleep(0.5)#To alter timing of presses
     ReleaseKey(LEFT)
 
 def right():

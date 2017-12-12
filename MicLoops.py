@@ -1,8 +1,7 @@
+# get audio from the microphone
+
 import speech_recognition as sr
 
-
-# get audio from the microphone
-# Make every word an independent
 r = sr.Recognizer()
 moves = []
 with sr.Microphone() as source:
@@ -10,17 +9,12 @@ with sr.Microphone() as source:
     audio = r.listen(source)
     moves.append(r.recognize_google(audio))
     print (moves)
-    new_moves = [words for segments in moves for words in segments.split()]
+    new_moves = [words for segments in moves for words in segments.split()] #Splits moves to a list/individual words
     print (new_moves)
 
-
-
-
-
-
 try:
-    if r.recognize_google(audio) == "up smash":
-        print ("Great upsmash!!")
+    if r.recognize_google(audio) == "Hello":
+        print ("Hello!")
     else:
         print("You said " + r.recognize_google(audio))
 except sr.UnknownValueError:
