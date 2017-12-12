@@ -35,7 +35,6 @@ while True:
                 elif action == "down" or action == "crouch":
                     crouch()
                 elif action == "punch" or action == "Jab":
-                    if action.index("double") == action.index(-1)
                     jab()
                 elif action == "double" and action == "Jab":
                     djab()

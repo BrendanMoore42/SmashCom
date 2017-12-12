@@ -55,6 +55,7 @@ r = sr.Recognizer()
 # r.non_speaking_duration = 0.35
 
 moves = []
+
 while True:
     # with sr.Microphone() as source:
     #     # print("Holy shit chill calibrating")

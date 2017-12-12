@@ -32,11 +32,13 @@ def crouch():
 
 def jab():
     PressKey(A)
+    time.sleep(0.05)
     ReleaseKey(A)
 
 def djab():
     PressKey(A)
     ReleaseKey(A)
+    time.sleep(0.05)
     PressKey(A)
     ReleaseKey(A)
 
@@ -47,6 +49,7 @@ def shield():
 
 def grab():
     PressKey(Z)
+    time.sleep(0.05)
     ReleaseKey(Z)
 
 def Rsmash():
@@ -65,6 +68,7 @@ def Lsmash():
 
 def laser():
     PressKey(B)
+    time.sleep(0.05)
     ReleaseKey(B)
 
 def shdl():
