@@ -27,6 +27,7 @@ L = 0x10
 R = 0x11
 DUP = 0x19
 COM = 0x32
+sp = 0x39
 
 """
 Gamecube keys as follows;

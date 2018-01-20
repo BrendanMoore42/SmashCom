@@ -2,6 +2,7 @@ from directkeys import *
 import time
 from moves import *
 import speech_recognition as sr
+from directkeys import sp
 
 
 options = ["jump", "left", "right", "crouch", "down", "up",
@@ -13,13 +14,15 @@ r = sr.Recognizer()
 
 moves = []
 
+go = sp
+
 while True:
     with sr.Microphone() as source:
         audio = []
         moves = []
         new_moves = []
         try:
-            print("Show me your moves:")
+            print("Show me your moves...:")
             audio = r.listen(source)
             moves.append(r.recognize_google(audio))
             print(moves)
