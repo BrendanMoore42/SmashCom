@@ -14,4 +14,4 @@ Tested on Win10.
   d) Map buttons relating to directkeys.py or custom mapping (if creating custom maps).  
 
 4. Open Melee, navigate to desired mode, Training mode to test recommended.
-5. Run buttontest.py, highlight Melee, say your commands. 
+5. Run buttontest.py, switch to Melee window, say your commands. 
