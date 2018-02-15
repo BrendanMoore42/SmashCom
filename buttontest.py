@@ -58,6 +58,8 @@ while True:
                         Lsmash()
                     elif action == "shine":
                         shine()
+                    elif action == "wave":
+                        wd_left()
                     else:
                         pass
                 except sr.UnknownValueError:

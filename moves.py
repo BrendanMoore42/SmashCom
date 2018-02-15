@@ -8,26 +8,28 @@ import time
 
 #Each function is a macro for a specific move
 def jump():
-    PressKey(X)
-    ReleaseKey(X)
+    PressKey(T)
+    time.sleep(0.1)
+    ReleaseKey(T)
 
 def up():
     PressKey(UP)
+    time.sleep(0.25)
     ReleaseKey(UP)
 
 def left():
     PressKey(LEFT)
-    time.sleep(0.5)#To alter timing of presses
+    time.sleep(0.1)#To alter timing of presses
     ReleaseKey(LEFT)
 
 def right():
     PressKey(RIGHT)
-    time.sleep(0.5)
+    time.sleep(0.1)
     ReleaseKey(RIGHT)
 
 def crouch():
     PressKey(DOWN)
-    time.sleep(0.5)
+    time.sleep(0.1)
     ReleaseKey(DOWN)
 
 def jab():
@@ -81,6 +83,13 @@ def shdl():
 def shine():
     PressKey(DOWN)
     PressKey(B)
-    time.sleep(0.5)
+    time.sleep(0.05)
     ReleaseKey(DOWN)
     ReleaseKey(B)
+
+def wd_left():
+    PressKey(X)
+    time.sleep(0.05)
+    PressKey(DOWN), PressKey(LEFT)
+    PressKey(R)
+    ReleaseKey(R), ReleaseKey(DOWN), ReleaseKey(LEFT)
