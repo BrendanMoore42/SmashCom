@@ -1,4 +1,4 @@
-# Smash Commander mk1.2
+# Smash Commander 
 Turn your microphone into a smash controller
 
 ## Setup
