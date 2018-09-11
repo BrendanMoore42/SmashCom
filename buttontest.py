@@ -1,21 +1,31 @@
+"""
+@brendanmoore42
+"""
 from directkeys import *
 import time
 from moves import *
 import speech_recognition as sr
 from directkeys import sp
 
+#extra modifiers for next update
+#one button options
+#options = ["jump", "left", "right", 
+#          "crouch", "down", "up",
+#           "a", "b", "grab", "shield", 
+#           "jab", "smash"]
 
-options = ["jump", "left", "right", "crouch", "down", "up",
-         "a", "b", "grab", "shield", "jab", "smash"]
+#modifiers that influence timings
+#mods    = ["hold", "smash", "tilt", 
+#           "double", "once", "twice", 
+#           "triple", "quadruple", "wait"]
 
-mods = ["hold", "smash", "tilt", "double", "once", "twice", "triple", "quadruple", "wait"]
-
+#instantiate Recognizer class
 r = sr.Recognizer()
 
 moves = []
-
 go = sp
 
+#opens the microphone to listen to all incoming speech
 while True:
     with sr.Microphone() as source:
         audio = []
@@ -23,9 +33,12 @@ while True:
         new_moves = []
         try:
             print("Show me your moves...:")
+            #microphone is listening
             audio = r.listen(source)
             moves.append(r.recognize_google(audio))
+            #print what the recognizer hears
             print(moves)
+            #splits the moves and checks for associations 
             new_moves = [words for segments in moves for words in segments.split()]
             print(new_moves)
             for action in new_moves:
