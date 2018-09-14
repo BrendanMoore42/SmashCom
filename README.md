@@ -5,7 +5,7 @@ The SC will pick out words and then initaite moves/combos that it hears in your 
 
 ## Setup
 
-Tested on Win10. Requires Python 3.6+. 
+Tested on Windows 10. Requires Python 3.6+. 
 
 ### Running Melee on Dolphin
 1. Any version of Dolphin GC emulator: https://dolphin-emu.org/. Or Netplay build: https://www.smashladder.com/guides/view/272o/play-melee-online-netplay-guide-faster-melee-5-8-7-with-uc
@@ -17,7 +17,9 @@ Tested on Win10. Requires Python 3.6+.
   d) Map buttons relating to directkeys.py or custom mapping (if creating custom maps).  
 4. Open Melee, navigate to desired mode, Training mode to test recommended.
 
-### buttontest.py
-In cmd/git run: python3 buttontest.py
+### Initialize
+In terminal run: 
+
+    $ python3 buttontest.py
 
 Wait for 'Show me your moves...' to print before saying your command. It's using Google's Speech Recognition API, so translation can sometime be inaccurate and take a few seconds. Smash commander really shines when two people play over netplay each using vocal commands. 
