@@ -14,9 +14,15 @@ quat = 4
 quin = 5
 
 #modifiers that influence timings
-modifiers = ["hold", "smash", "tilt",
-        "double", "once", "twice",
-        "triple", "quadruple", "wait"]
+modifiers = {1: ["up", "down", "left", "right"],
+             2: ["double", "once", "twice",],
+             3: ["hold", "wait", "triple"],
+             4: ["quadruple", "four"]
+             }
+num_to_int = {'one': 1, 'two': 2, 'three': 3,
+              'four': 4, 'five': 5, 'six': 6,
+              'seven': 7, 'eight': 8, 'nine': 9,
+              'ten': 10, 'half': 0.5}
 
 #available moves
 # moves_list = {single: {'jab':jab(), 'crouch':crouch(), 'shield':shield(), 'grab':grab(), 'wd':wd(),},
@@ -25,21 +31,35 @@ modifiers = ["hold", "smash", "tilt",
 #               quin: {'lsmash', 'laser', 'shdl', 'wd', }}
 
 def check_modifier(word, modifiers):
-    def get_value(word, moves):
-        # returns int value from text
-        num_to_int = {'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
-                      'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10}
-        word_index = moves.index(word)
-        modifier_index = moves[word_index+3]
-        return modifier_index
 
+    def get_value(word, moves):
+        """
+
+        :param word: Incoming modifier
+        :param moves: Incoming instructions from speech
+        :param index: Where to search for number modifier
+        :return:
+        """
+        try:
+            # returns int value from text
+            word_index = moves.index(word)
+            # get value for modifier to check where number should be
+            mod_value = [i for i,x in modifiers.items() if word in x]
+            # search through the incoming moves to find number to convert
+            modifier_index = moves[word_index + mod_value]
+            # return the value to modify move
+            modifier_out = num_to_int[modifier_index]
+        except:
+            # defaults to 3 if translation fails
+            modifier_out = 3
+        return modifier_out
 
     if word in modifiers:
         if word == 'hold':
             modifier = get_value(word)
 
         modifier = word
-    return modifier
+    return action, modifier
 
 
 def execute_moves(moves):
@@ -50,8 +70,11 @@ def execute_moves(moves):
     new_moves = [words for segments in moves for words in segments.split()]
     print(new_moves)
 
+    # iterate through each move
     for word in new_moves:
-        modifier = check_modifier(word, modifiers)
+        #check if move is a modifier -> new tree
+        action, modifier = check_modifier(word, modifiers)
+        if modifier:
 
 
 
@@ -113,6 +136,10 @@ class Move():
         self.smash = 'right'
 
     #Each function is a macro for a specific move
+    def wait(self, wait):
+        time.sleep(wait)
+
+
     def jump(self):
         PressKey(T)
         time.sleep(0.1)
