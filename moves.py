@@ -1,95 +1,208 @@
 from directkeys import *
 import time
 
-
+moves_list = ['','']
 # dash = 1
 # hold = dash * time
-#
 
-#Each function is a macro for a specific move
-def jump():
-    PressKey(T)
-    time.sleep(0.1)
-    ReleaseKey(T)
 
-def up():
-    PressKey(UP)
-    time.sleep(0.25)
-    ReleaseKey(UP)
+# Similar vectors
+single = 1
+double = 2
+hold = 3
+quat = 4
+quin = 5
 
-def left():
-    PressKey(LEFT)
-    time.sleep(0.1)#To alter timing of presses
-    ReleaseKey(LEFT)
+#modifiers that influence timings
+modifiers = ["hold", "smash", "tilt",
+        "double", "once", "twice",
+        "triple", "quadruple", "wait"]
 
-def right():
-    PressKey(RIGHT)
-    time.sleep(0.1)
-    ReleaseKey(RIGHT)
+#available moves
+# moves_list = {single: {'jab':jab(), 'crouch':crouch(), 'shield':shield(), 'grab':grab(), 'wd':wd(),},
+#               double: {'jump':jump(), 'djab': djab(),},
+#               quat: {'up', 'down', 'left', 'right',},
+#               quin: {'lsmash', 'laser', 'shdl', 'wd', }}
 
-def crouch():
-    PressKey(DOWN)
-    time.sleep(0.1)
-    ReleaseKey(DOWN)
+def check_modifier(word, modifiers):
+    def get_value(word, moves):
+        # returns int value from text
+        num_to_int = {'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
+                      'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10}
+        word_index = moves.index(word)
+        modifier_index = moves[word_index+3]
+        return modifier_index
 
-def jab():
-    PressKey(A)
-    time.sleep(0.05)
-    ReleaseKey(A)
 
-def djab():
-    PressKey(A)
-    ReleaseKey(A)
-    time.sleep(0.05)
-    PressKey(A)
-    ReleaseKey(A)
+    if word in modifiers:
+        if word == 'hold':
+            modifier = get_value(word)
 
-def shield():
-    PressKey(R)
-    time.sleep(2)
-    ReleaseKey(R)
+        modifier = word
+    return modifier
 
-def grab():
-    PressKey(Z)
-    time.sleep(0.05)
-    ReleaseKey(Z)
 
-def Rsmash():
-    PressKey(RIGHT)
-    PressKey(A)
-    time.sleep(0.25)
-    ReleaseKey(RIGHT)
-    ReleaseKey(A)
+def execute_moves(moves):
 
-def Lsmash():
-    PressKey(LEFT)
-    PressKey(A)
-    time.sleep(0.25)
-    ReleaseKey(LEFT)
-    ReleaseKey(A)
+    # print what the recognizer hears
+    print(moves)
+    # splits the moves and checks for associations
+    new_moves = [words for segments in moves for words in segments.split()]
+    print(new_moves)
 
-def laser():
-    PressKey(B)
-    time.sleep(0.05)
-    ReleaseKey(B)
+    for word in new_moves:
+        modifier = check_modifier(word, modifiers)
 
-def shdl():
-    PressKey(Y)
-    PressKey(B)
-    ReleaseKey(B)
-    PressKey(B)
-    ReleaseKey(B)
 
-def shine():
-    PressKey(DOWN)
-    PressKey(B)
-    time.sleep(0.05)
-    ReleaseKey(DOWN)
-    ReleaseKey(B)
 
-def wd_left():
-    PressKey(X)
-    time.sleep(0.05)
-    PressKey(DOWN), PressKey(LEFT)
-    PressKey(R)
-    ReleaseKey(R), ReleaseKey(DOWN), ReleaseKey(LEFT)
+
+    try:
+        if action == 'hold':
+            pass
+        if action in moves_list:
+            moves_list[action]
+
+
+        if action == "jump":
+            jump()
+        elif action == "laser":
+            laser()
+        elif action == "double-laser":
+            shdl()
+        elif action == "up":
+            up()
+        elif action == "left":
+            left()
+        elif action == "right":
+            right()
+        elif action == "down" or action == "crouch":
+            crouch()
+        elif action == "punch" or action == "Jab":
+            jab()
+        elif action == "double" and action == "Jab":
+            djab()
+        elif action == "Shield":
+            shield()
+        elif action == "grab":
+            grab()
+        elif action == "right smash":
+            Rsmash()
+        elif action == "left smash":
+            Lsmash()
+        elif action == "shine":
+            shine()
+        elif action == "wave":
+            wd_left()
+        if action == "Melee should have tripping":
+            print('No Johns')
+            break
+        else:
+            pass
+    except sr.UnknownValueError:
+        print("Could not understand audio")
+    except sr.RequestError as e:
+        print("Could not request results; {0}".format(e))
+
+
+class Move():
+
+    def __init__(self):
+        self.hold = 3
+        self.wait = 3
+        self.tilt = 'left'
+        self.smash = 'right'
+
+    #Each function is a macro for a specific move
+    def jump(self):
+        PressKey(T)
+        time.sleep(0.1)
+        ReleaseKey(T)
+
+    def up(self):
+        PressKey(UP)
+        time.sleep(0.25)
+        ReleaseKey(UP)
+
+    def left(self):
+        PressKey(LEFT)
+        time.sleep(0.1)#To alter timing of presses
+        ReleaseKey(LEFT)
+
+    def right(self):
+        PressKey(RIGHT)
+        time.sleep(0.1)
+        ReleaseKey(RIGHT)
+
+    def crouch(self):
+        PressKey(DOWN)
+        time.sleep(0.1)
+        ReleaseKey(DOWN)
+
+    def jab(self):
+        PressKey(A)
+        time.sleep(0.05)
+        ReleaseKey(A)
+
+    def djab(self):
+        PressKey(A)
+        ReleaseKey(A)
+        time.sleep(0.05)
+        PressKey(A)
+        ReleaseKey(A)
+
+    def shield(self):
+        PressKey(R)
+        time.sleep(2)
+        ReleaseKey(R)
+
+    def grab(self):
+        PressKey(Z)
+        time.sleep(0.05)
+        ReleaseKey(Z)
+
+    def Rsmash(self):
+        PressKey(RIGHT)
+        PressKey(A)
+        time.sleep(0.25)
+        ReleaseKey(RIGHT)
+        ReleaseKey(A)
+
+    def Lsmash(self):
+        PressKey(LEFT)
+        PressKey(A)
+        time.sleep(0.25)
+        ReleaseKey(LEFT)
+        ReleaseKey(A)
+
+    def laser(self):
+        PressKey(B)
+        time.sleep(0.05)
+        ReleaseKey(B)
+
+    def shdl(self):
+        PressKey(Y)
+        PressKey(B)
+        ReleaseKey(B)
+        PressKey(B)
+        ReleaseKey(B)
+
+    def shine(self):
+        PressKey(DOWN)
+        PressKey(B)
+        time.sleep(0.05)
+        ReleaseKey(DOWN)
+        ReleaseKey(B)
+
+    def wd_left(self):
+        PressKey(X)
+        time.sleep(0.05)
+        PressKey(DOWN), PressKey(LEFT)
+        PressKey(R)
+        ReleaseKey(R), ReleaseKey(DOWN), ReleaseKey(LEFT)
+
+    def wd_right(self):
+        PressKey(X)
+        time.sleep(0.05)
+        PressKey(DOWN), PressKey(RIGHT)
+        PressKey(R)
+        ReleaseKey(R), ReleaseKey(DOWN), ReleaseKey(RIGHT)
