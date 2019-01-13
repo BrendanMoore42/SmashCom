@@ -1,36 +1,49 @@
 """
-Standard moveset
-Can port custom game packs
-the standard moveset should map to a gamecube controller,
-this can be modded to any controller
+author: BrendanMoore42
+date: Jan 12, 2019
 
+Standard moveset - Gamecube Controller for Dolphin
 
+Can be ported to custom console and game-specific packs
 
-
-
+Games Supported Currently:
+Super Smash Bros. Melee
 """
+# from smash_melee import AddOn
 from directkeys import *
 
-class Move():
+buttons = {'a': ['a'],
+           'b': ['b'],
+           'x': ['x'],
+           'y': ['y'],
+           'L': ['L'],
+           'R': ['R'],
+           'z': ['Z'],
+           'up': ['up'],
+           'down': ['down'],
+           'left': ['left'],
+           'right': ['up'],}
 
-    def __init__(self, move, direction, modifier=None, mod_move=None, mod_time=None, wombo=True):
+class Move():
+    def __init__(self, move, direction, modifier=None, mod_move=None, mod_time=None, execute=True):
         self.move = move
         self.direction = direction
         self.modifier = modifier
         self.mod_move = mod_move
-        self.mod_time = mod_time
-        self.hold = 3
+        self.mod_time = 1
+        self.hold = 1
         self.tilt = 'left'
         self.smash = 'right'
 
-        available_moves = {'jab': self.jab(), 'crouch': self.crouch(), 'shield': self.shield(), 'grab': self.grab(), 'wd': wd(),
-                           'wait': wait()}
+        available_moves = {self.a_press: buttons["a"], self.b_press: buttons["b"],
+                           self.down_press: ['crouch', 'down'],}
 
-        if wombo:
-            self.wombo_combo()
+        if execute:
+            self.execute_moves()
 
-    def wombo_combo(self):
-        if self.modifier:
+    def execute_moves(self):
+
+        if self.move in ['wait', 'hold']:
 
 
 
