@@ -1,24 +1,28 @@
-from directkeys import *
+"""
+author: @brendanmoore42
+date: Jan 11, 2019
+
+SmashComm: Control the game.
+
+Moves
+
+Main function to parse instructions and execute moves
+"""
+
+import sys
 import time
+from directkeys import *
 
 moves_list = ['','']
 # dash = 1
 # hold = dash * time
 
-
-# Similar vectors
-single = 1
-double = 2
-hold = 3
-quat = 4
-quin = 5
-
 #modifiers that influence timings
 modifiers = {1: ["up", "down", "left", "right"],
              2: ["double", "once", "twice",],
              3: ["hold", "wait", "triple"],
-             4: ["quadruple", "four"]
-             }
+             4: ["quadruple", "four"]}
+
 num_to_int = {'one': 1, 'two': 2, 'three': 3,
               'four': 4, 'five': 5, 'six': 6,
               'seven': 7, 'eight': 8, 'nine': 9,
@@ -29,6 +33,12 @@ num_to_int = {'one': 1, 'two': 2, 'three': 3,
 #               double: {'jump':jump(), 'djab': djab(),},
 #               quat: {'up', 'down', 'left', 'right',},
 #               quin: {'lsmash', 'laser', 'shdl', 'wd', }}
+
+def quit_game(moves):
+    exit_phrases = ["melee should have tripping", 'brawl was better', 'luigi is a gimmick', 'quit game']
+    if moves in exit_phrases:
+        print('No Johns')
+        sys.exit()
 
 def check_modifier(word, modifiers):
 
@@ -50,81 +60,82 @@ def check_modifier(word, modifiers):
             # return the value to modify move
             modifier_out = num_to_int[modifier_index]
         except:
-            # defaults to 3 if translation fails
-            modifier_out = 3
+            # defaults to 1 if translation fails
+            modifier_out = 1
         return modifier_out
 
     if word in modifiers:
         if word == 'hold':
             modifier = get_value(word)
+    print('***')
+    print(modifier)
 
-        modifier = word
-    return action, modifier
+    return modifier
 
 
 def execute_moves(moves):
 
+    # check if quit phrase activated
+    quit_game(moves)
     # print what the recognizer hears
     print(moves)
     # splits the moves and checks for associations
     new_moves = [words for segments in moves for words in segments.split()]
-    print(new_moves)
 
     # iterate through each move
     for word in new_moves:
         #check if move is a modifier -> new tree
         action, modifier = check_modifier(word, modifiers)
         if modifier:
+            print('yay')
+            break
 
 
 
 
     try:
-        if action == 'hold':
-            pass
-        if action in moves_list:
-            moves_list[action]
+            if action == 'hold':
+                pass
+            if action in moves_list:
+                moves_list[action]
 
 
-        if action == "jump":
-            jump()
-        elif action == "laser":
-            laser()
-        elif action == "double-laser":
-            shdl()
-        elif action == "up":
-            up()
-        elif action == "left":
-            left()
-        elif action == "right":
-            right()
-        elif action == "down" or action == "crouch":
-            crouch()
-        elif action == "punch" or action == "Jab":
-            jab()
-        elif action == "double" and action == "Jab":
-            djab()
-        elif action == "Shield":
-            shield()
-        elif action == "grab":
-            grab()
-        elif action == "right smash":
-            Rsmash()
-        elif action == "left smash":
-            Lsmash()
-        elif action == "shine":
-            shine()
-        elif action == "wave":
-            wd_left()
-        if action == "Melee should have tripping":
-            print('No Johns')
-            break
-        else:
-            pass
-    except sr.UnknownValueError:
-        print("Could not understand audio")
-    except sr.RequestError as e:
-        print("Could not request results; {0}".format(e))
+            if action == "jump":
+                jump()
+            elif action == "laser":
+                laser()
+            elif action == "double-laser":
+                shdl()
+            elif action == "up":
+                up()
+            elif action == "left":
+                left()
+            elif action == "right":
+                right()
+            elif action == "down" or action == "crouch":
+                crouch()
+            elif action == "punch" or action == "Jab":
+                jab()
+            elif action == "double" and action == "Jab":
+                djab()
+            elif action == "Shield":
+                shield()
+            elif action == "grab":
+                grab()
+            elif action == "right smash":
+                Rsmash()
+            elif action == "left smash":
+                Lsmash()
+            elif action == "shine":
+                shine()
+            elif action == "wave":
+                wd_left()
+            else:
+                pass
+        except sr.UnknownValueError:
+            print("Could not understand audio")
+        except sr.RequestError as e:
+            print("Could not request results; {0}".format(e))
 
 
 class Move():
@@ -145,30 +156,36 @@ class Move():
         time.sleep(0.1)
         ReleaseKey(T)
 
+
     def up(self):
         PressKey(UP)
         time.sleep(0.25)
         ReleaseKey(UP)
+
 
     def left(self):
         PressKey(LEFT)
         time.sleep(0.1)#To alter timing of presses
         ReleaseKey(LEFT)
 
+
     def right(self):
         PressKey(RIGHT)
         time.sleep(0.1)
         ReleaseKey(RIGHT)
+
 
     def crouch(self):
         PressKey(DOWN)
         time.sleep(0.1)
         ReleaseKey(DOWN)
 
+
     def jab(self):
         PressKey(A)
         time.sleep(0.05)
         ReleaseKey(A)
+
 
     def djab(self):
         PressKey(A)
@@ -177,15 +194,18 @@ class Move():
         PressKey(A)
         ReleaseKey(A)
 
+
     def shield(self):
         PressKey(R)
         time.sleep(2)
         ReleaseKey(R)
 
+
     def grab(self):
         PressKey(Z)
         time.sleep(0.05)
         ReleaseKey(Z)
+
 
     def Rsmash(self):
         PressKey(RIGHT)
@@ -193,6 +213,7 @@ class Move():
         time.sleep(0.25)
         ReleaseKey(RIGHT)
         ReleaseKey(A)
+
 
     def Lsmash(self):
         PressKey(LEFT)
@@ -213,12 +234,14 @@ class Move():
         PressKey(B)
         ReleaseKey(B)
 
+
     def shine(self):
         PressKey(DOWN)
         PressKey(B)
         time.sleep(0.05)
         ReleaseKey(DOWN)
         ReleaseKey(B)
+
 
     def wd_left(self):
         PressKey(X)
@@ -227,9 +250,13 @@ class Move():
         PressKey(R)
         ReleaseKey(R), ReleaseKey(DOWN), ReleaseKey(LEFT)
 
+
     def wd_right(self):
         PressKey(X)
         time.sleep(0.05)
         PressKey(DOWN), PressKey(RIGHT)
         PressKey(R)
         ReleaseKey(R), ReleaseKey(DOWN), ReleaseKey(RIGHT)
+
+player = Move()
+player.jab()

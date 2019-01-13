@@ -7,6 +7,7 @@ SmashComm: Control the game.
 """
 from directkeys import *
 import time
+import sys
 import keyboard
 from moves import *
 import speech_recognition as sr
@@ -53,10 +54,6 @@ def show_me_your_moves():
             moves.append(r.recognize_google(audio))
             # run main fn
             execute_moves(moves=moves)
-
-
-
-
         except:
             pass
 
