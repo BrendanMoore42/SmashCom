@@ -23,7 +23,7 @@ class Move():
         self.tilt = 'left'
         self.smash = 'right'
 
-        available_moves = {'jab': jab(), 'crouch': crouch(), 'shield': shield(), 'grab': grab(), 'wd': wd(),
+        available_moves = {'jab': self.jab(), 'crouch': self.crouch(), 'shield': self.shield(), 'grab': self.grab(), 'wd': wd(),
                            'wait': wait()}
 
         if wombo:
