@@ -8,28 +8,29 @@ Super Smash Bros. Melee Controller Add-On
 """
 from directkeys import *
 
-buttons = {'a': ['a'],
-           'b': ['b'],
-           'x': ['x'],
-           'y': ['y'],
-           'L': ['L'],
-           'R': ['R'],
-           'z': ['Z'],
-           'up': ['up'],
-           'down': ['down'],
-           'left': ['left'],
-           'right': ['up'],
-           'd_up': ['up', 'jump'],
-           'd_down': ['down', 'crouch', ],
-           'd_left': ['left'],
-           'd_right': ['up'],
-           'c_up': ['up', 'jump'],
-           'c_down': ['down', 'crouch', ],
-           'c_left': ['left'],
-           'c_right': ['up'],
-           }
-
+# Super Smash Bros Melee
 class AddOn():
+
+    buttons = {'a': ['jab', 'punch', 'slap', 'strike'],
+               'b': ['b', 'special', ],
+               'x': ['x', 'jump', 'colour'],
+               'y': buttons['x'],
+               'L': ['L', 'shield',],
+               'R': buttons['L'],
+               'z': ['Z', 'light shield', 'grab'],
+               'up': ['up'],
+               'down': ['down', 'crouch'],
+               'left': ['left', 'walk', 'run'],
+               'right': ['right', 'walk', 'run'],
+               'd_up': ['d-pad up', 'taunt'],
+               'd_down': ['d-pad down'],
+               'd_left': ['d-pad left'],
+               'd_right': ['d-pad right'],
+               'c_up': ['see up', 'up smash'],
+               'c_down': ['see down', 'down smash',],
+               'c_left': ['see left', 'left smash'],
+               'c_right': ['see right', 'right smash'],
+               }
 
     def __init__(self, move, direction, modifier=None, mod_move=None, mod_time=None, wombo=True):
         self.move = move
@@ -39,7 +40,7 @@ class AddOn():
         self.mod_time = 1
         self.hold = 1
 
-        available_moves = {self.jab: buttons['a'], self.crouch: ['crouch', 'down'],
+        available_moves = {self.jab: buttons['a'], self.crouch: ['down'],
                            'shield': self.shield, 'grab': self.grab,
                            'wait': self.wait}
 

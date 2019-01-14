@@ -34,7 +34,7 @@ buttons = {'a': ['a'],
            'c_right': ['see up'],
            }
 
-class Controller():
+class GC_Controller():
     def __init__(self, moves):
         self.moves = moves
         self.new_moves = moves.split(' ')
@@ -45,7 +45,9 @@ class Controller():
         self.execute = True
         self.hold = 1
 
-        self.modifiers = ['wait', 'hold', 'press', 'side', 'smash', 'tilt', 'tap', 'mash']
+        # int value is where controller looks for number to convert
+        # example: hold shield for 4 seconds
+        self.modifiers = {'wait', 'hold', 'press', 'side', 'smash', 'tilt', 'tap', 'mash', 'half', 'trigger'}
         self.available_moves = {self.a_press: buttons["a"], self.b_press: buttons["b"],
                                 self.down_press: buttons['down'], self.up_press: buttons['up'],
                                 self.left_press: buttons['left'], self.right_press: ['right'],
@@ -57,9 +59,38 @@ class Controller():
         #execute move
         [i() for i, x in self.available_moves.items() for move in self.new_moves if move in x]
 
+        def check_modifiers(move, incoming):
+            """
+            Assign values for modified moves
+            :param move: Modifier move to set modifier terms
+            :param incoming: Move list coming in from main function
+            :return:
+            """
+            modifier = move
+
+            # get specified number
+            try:
+                # returns int value from text
+                word_index = moves.index(word)
+                # get value for modifier to check where number should be
+                mod_value = [i for i, x in self.modifiers.items() if word in x]
+                # search through the incoming moves to find number to convert
+                modifier_index = moves[word_index + mod_value]
+                # return the value to modify move
+                modifier_out = num_to_int[modifier_index]
+            except:
+                # defaults to 1 if translation fails
+                modifier_out = 1
+
+
+            return modifier, mod_move, mod_time
+
         if self.execute:
             for move in self.new_moves:
                 if move in self.modifiers:
+                    self.modifier, self.mod_move, self.mod_time = check_modifiers(move=move, incoming=self.moves)
+
+
 
                     [i() for i, x in self.available_moves.items() if move in x]
 
@@ -68,7 +99,7 @@ class Controller():
 
         if self.move in self.modifiers:
 
-        [i() for i, x in self.available_moves.items() if self.move in x]
+            [i() for i, x in self.available_moves.items() if self.move in x]
 
 
 
@@ -149,7 +180,7 @@ class Controller():
         ReleaseKey(LEFT)
         ReleaseKey(A)
 
-    def laser(self):
+    def b_press(self):
         PressKey(B)
         time.sleep(0.05)
         ReleaseKey(B)
@@ -197,4 +228,4 @@ modifier = "hold"
 mod_move = "sheild"
 mod_time = 4
 
-player = Move(move=move, direction=direction, modifier=modifier, mod_move=mod_move, mod_time=mod_time) # for debugs
+player = GC_Controller(moves=moves)
