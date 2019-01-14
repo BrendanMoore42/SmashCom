@@ -22,7 +22,12 @@ buttons = {'a': ['a'],
            'up': ['up', 'jump'],
            'down': ['down', 'crouch',],
            'left': ['left'],
-           'right': ['up'],}
+           'right': ['up'],
+           'd_up': ['up', 'jump'],
+           'd_down': ['down', 'crouch', ],
+           'd_left': ['left'],
+           'd_right': ['up'],
+           }
 
 class Controller():
     def __init__(self, moves): #, direction, modifier=None, mod_move=None, mod_time=None, execute=True):
@@ -41,7 +46,7 @@ class Controller():
                                 self.left_press: buttons['left'], self.right_press: ['right'],
                                 self.hold: buttons['hold']}
         #execute move
-        [i() for i, x in self.available_moves.items() if self.move in x]
+        [i() for i, x in self.available_moves.items() for move in self.new_moves if move in x]
 
         if self.execute:
             for move in self.new_moves:
