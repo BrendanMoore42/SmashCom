@@ -19,36 +19,43 @@ buttons = {'a': ['a'],
            'L': ['L'],
            'R': ['R'],
            'z': ['Z'],
-           'up': ['up'],
-           'down': ['down'],
+           'up': ['up', 'jump'],
+           'down': ['down', 'crouch',],
            'left': ['left'],
            'right': ['up'],}
 
-class Move():
-    def __init__(self, move, direction, modifier=None, mod_move=None, mod_time=None, execute=True):
-        self.move = move
+class Controller():
+    def __init__(self, moves): #, direction, modifier=None, mod_move=None, mod_time=None, execute=True):
+        self.moves = moves
+        self.new_moves = moves.split(' ')
         self.direction = direction
-        self.modifier = modifier
-        self.mod_move = mod_move
-        self.mod_time = 1
+        self.modifier = None
+        self.mod_move = None
+        self.mod_time = None
+        self.execute = True
         self.hold = 1
-        self.tilt = 'left'
-        self.smash = 'right'
 
-        available_moves = {self.a_press: buttons["a"], self.b_press: buttons["b"],
-                           self.down_press: ['crouch', 'down'],}
+        self.modifiers = ['wait', 'hold', 'press', 'side', '']
+        self.available_moves = {self.a_press: buttons["a"], self.b_press: buttons["b"],
+                                self.down_press: buttons['down'], self.up_press: buttons['up'],
+                                self.left_press: buttons['left'], self.right_press: ['right'],
+                                self.hold: buttons['hold']}
+        #execute move
+        [i() for i, x in self.available_moves.items() if self.move in x]
 
-        if execute:
-            self.execute_moves()
+        if self.execute:
+            for move in self.new_moves:
+                if move in modifiers:
+
+                [i() for i, x in self.available_moves.items() if move in x]
+
 
     def execute_moves(self):
 
-        if self.move in ['wait', 'hold']:
+        if self.move in self.modifiers:
 
+        [i() for i, x in self.available_moves.items() if self.move in x]
 
-
-        if self.move == ''
-        print('sup')
 
 
     #Each function is a macro for a specific move
@@ -56,10 +63,11 @@ class Move():
         time.sleep(wait)
 
 
-    def jump(self):
-        PressKey(T)
+    def a_press(self, ):
+
+        PressKey(A)
         time.sleep(0.1)
-        ReleaseKey(T)
+        ReleaseKey(A)
 
 
     def up(self):

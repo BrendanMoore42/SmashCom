@@ -9,25 +9,15 @@ from directkeys import *
 import time
 import sys
 import keyboard
-from moves import *
+# from GC_Main import Controller
+# from moves import *
 import speech_recognition as sr
-
-#extra modifiers for next update
-#one button options
-#options = ["jump", "left", "right",
-#          "crouch", "down", "up",
-#           "a", "b", "grab", "shield",
-#           "jab", "smash"]
-
-
 
 #instantiate Recognizer class
 r = sr.Recognizer()
 
 moves = []
 go = sp
-
-
 version = '1.0.5'
 
 def lets_go():
@@ -52,8 +42,11 @@ def show_me_your_moves():
             #microphone is listening
             audio = r.listen(source)
             moves.append(r.recognize_google(audio))
+            print(moves)
+
             # run main fn
-            execute_moves(moves=moves)
+            #player = Controller(moves=moves)#, move=move, direction=direction, modifier=modifier, mod_move=mod_move, mod_time=mod_time)
+            # execute_moves(moves=moves)
         except:
             pass
 

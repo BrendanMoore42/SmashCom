@@ -15,18 +15,6 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/moves.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="23" column="37" selection-start-line="23" selection-start-column="37" selection-end-line="23" selection-end-column="37" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/smash_melee.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
@@ -35,20 +23,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GC_Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="31" column="32" lean-forward="true" selection-start-line="31" selection-start-column="32" selection-end-line="31" selection-end-column="32" />
+            <state relative-caret-position="255">
+              <caret line="35" column="21" lean-forward="true" selection-start-line="35" selection-start-column="21" selection-end-line="35" selection-end-column="21" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/smashcom.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
+            <state relative-caret-position="432">
+              <caret line="31" column="13" lean-forward="true" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
               <folding>
                 <element signature="e#100#124#0" expanded="true" />
               </folding>
@@ -73,6 +61,15 @@
               <folding>
                 <element signature="e#24#48#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/moves.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="323">
+              <caret line="79" column="37" lean-forward="true" selection-start-line="79" selection-start-column="37" selection-end-line="79" selection-end-column="37" />
             </state>
           </provider>
         </entry>
@@ -104,11 +101,11 @@
         <option value="$PROJECT_DIR$/mictest.py" />
         <option value="$PROJECT_DIR$/directkeys.py" />
         <option value="$PROJECT_DIR$/buttontest.py" />
-        <option value="$PROJECT_DIR$/smashcom.py" />
         <option value="$PROJECT_DIR$/moves.py" />
         <option value="$PROJECT_DIR$/std_moveset.py" />
         <option value="$PROJECT_DIR$/smash_melee.py" />
         <option value="$PROJECT_DIR$/GC_Main.py" />
+        <option value="$PROJECT_DIR$/smashcom.py" />
       </list>
     </option>
   </component>
@@ -143,7 +140,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.std_moveset">
+  <component name="RunManager" selected="Python.smashcom">
     <configuration name="buttontest" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="SmashMic" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -258,9 +255,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.smashcom" />
         <item itemvalue="Python.std_moveset" />
         <item itemvalue="Python.moves" />
-        <item itemvalue="Python.smashcom" />
         <item itemvalue="Python.buttontest" />
         <item itemvalue="Python.mictest" />
       </list>
@@ -326,26 +323,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/smashcom.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
-          <folding>
-            <element signature="e#100#124#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/moves.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="23" column="37" selection-start-line="23" selection-start-column="37" selection-end-line="23" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/std_moveset.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -360,10 +337,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/moves.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="79" column="37" lean-forward="true" selection-start-line="79" selection-start-column="37" selection-end-line="79" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/GC_Main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="31" column="32" lean-forward="true" selection-start-line="31" selection-start-column="32" selection-end-line="31" selection-end-column="32" />
+        <state relative-caret-position="255">
+          <caret line="35" column="21" lean-forward="true" selection-start-line="35" selection-start-column="21" selection-end-line="35" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/smashcom.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="31" column="13" lean-forward="true" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
+          <folding>
+            <element signature="e#100#124#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
