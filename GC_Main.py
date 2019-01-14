@@ -12,6 +12,7 @@ Super Smash Bros. Melee
 # from smash_melee import AddOn
 from directkeys import *
 
+# Add to button list to modify/add phrases
 buttons = {'a': ['a'],
            'b': ['b'],
            'x': ['x'],
@@ -19,18 +20,22 @@ buttons = {'a': ['a'],
            'L': ['L'],
            'R': ['R'],
            'z': ['Z'],
-           'up': ['up', 'jump'],
-           'down': ['down', 'crouch',],
+           'up': ['up'],
+           'down': ['down'],
            'left': ['left'],
            'right': ['up'],
-           'd_up': ['up', 'jump'],
-           'd_down': ['down', 'crouch', ],
-           'd_left': ['left'],
-           'd_right': ['up'],
+           'd_up': ['d-pad up'],
+           'd_down': ['d-pad down'],
+           'd_left': ['d-pad left'],
+           'd_right': ['d-pad up'],
+           'c_up': ['see up'],
+           'c_down': ['see down'],
+           'c_left': ['see left'],
+           'c_right': ['see up'],
            }
 
 class Controller():
-    def __init__(self, moves): #, direction, modifier=None, mod_move=None, mod_time=None, execute=True):
+    def __init__(self, moves):
         self.moves = moves
         self.new_moves = moves.split(' ')
         self.direction = direction
@@ -40,19 +45,23 @@ class Controller():
         self.execute = True
         self.hold = 1
 
-        self.modifiers = ['wait', 'hold', 'press', 'side', '']
+        self.modifiers = ['wait', 'hold', 'press', 'side', 'smash', 'tilt', 'tap', 'mash']
         self.available_moves = {self.a_press: buttons["a"], self.b_press: buttons["b"],
                                 self.down_press: buttons['down'], self.up_press: buttons['up'],
                                 self.left_press: buttons['left'], self.right_press: ['right'],
+                                self.down_pad_press: buttons['d_down'], self.up_pad_press: buttons['d_up'],
+                                self.left_pad_press: buttons['d_left'], self.right_pad_press: ['d_right'],
+                                self.down_c_press: buttons['c_down'], self.up_c_press: buttons['c_up'],
+                                self.left_c_press: buttons['c_left'], self.right_c_press: ['c_right'],
                                 self.hold: buttons['hold']}
         #execute move
         [i() for i, x in self.available_moves.items() for move in self.new_moves if move in x]
 
         if self.execute:
             for move in self.new_moves:
-                if move in modifiers:
+                if move in self.modifiers:
 
-                [i() for i, x in self.available_moves.items() if move in x]
+                    [i() for i, x in self.available_moves.items() if move in x]
 
 
     def execute_moves(self):

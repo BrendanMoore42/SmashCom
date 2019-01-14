@@ -9,7 +9,7 @@ from directkeys import *
 import time
 import sys
 import keyboard
-# from GC_Main import Controller
+from GC_Main import Controller
 # from moves import *
 import speech_recognition as sr
 
@@ -40,12 +40,13 @@ def show_me_your_moves():
         try:
             print("Show me your moves! ")
             #microphone is listening
-            audio = r.listen(source)
+            audio = r.listen(source, timeout=15)
+            print('Translating...')
             moves.append(r.recognize_google(audio))
             print(moves)
 
             # run main fn
-            #player = Controller(moves=moves)#, move=move, direction=direction, modifier=modifier, mod_move=mod_move, mod_time=mod_time)
+            player = Controller(moves=moves)#, move=move, direction=direction, modifier=modifier, mod_move=mod_move, mod_time=mod_time)
             # execute_moves(moves=moves)
         except:
             pass

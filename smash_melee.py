@@ -8,7 +8,7 @@ Super Smash Bros. Melee Controller Add-On
 """
 from directkeys import *
 
-commands = {'a': ['a'],
+buttons = {'a': ['a'],
            'b': ['b'],
            'x': ['x'],
            'y': ['y'],
@@ -18,7 +18,16 @@ commands = {'a': ['a'],
            'up': ['up'],
            'down': ['down'],
            'left': ['left'],
-           'right': ['up'],}
+           'right': ['up'],
+           'd_up': ['up', 'jump'],
+           'd_down': ['down', 'crouch', ],
+           'd_left': ['left'],
+           'd_right': ['up'],
+           'c_up': ['up', 'jump'],
+           'c_down': ['down', 'crouch', ],
+           'c_left': ['left'],
+           'c_right': ['up'],
+           }
 
 class AddOn():
 
