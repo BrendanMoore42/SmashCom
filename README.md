@@ -1,7 +1,7 @@
 # SmashCom 
 SmashCom is a custom vocal controller that takes user speech and converts the instructions to pre-set button inputs. Inspired by Super Smash Bros. and games with a deep lexicon, SmashCom can correctly interpret and use modifiers in colloquialisms to string more complex actions together. 
 
-### Mods
+### Modifications and Community
 SmashCom is currently designed and actionable for the Nintendo Gamecube, however, can be modified to work with any emulator by development of AddOn controller packs located in the Mods folder. If you want to try creating a NES, SNES, Playstation Dualshock or other controller scheme, or add game-specific language packs, please clone the repository and if it works we'll add it to the project. 
 
 ### Example: Smash Bros. Melee
