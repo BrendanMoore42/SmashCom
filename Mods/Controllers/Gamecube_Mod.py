@@ -2,15 +2,14 @@
 author: BrendanMoore42
 date: Jan 12, 2019
 
-Standard moveset - Gamecube Controller for Dolphin
-
-Can be ported to custom console and game-specific packs
+Standard moveset Mod- Gamecube Controller for Dolphin
 
 Games Supported Currently:
 Super Smash Bros. Melee
 """
-# from smash_melee import AddOn
+import time
 from directkeys import *
+# from smash_melee import AddOn
 
 # Add to button list to modify/add phrases
 buttons = {'a': ['a'],
