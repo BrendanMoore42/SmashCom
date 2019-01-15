@@ -10,8 +10,8 @@ import time
 import sys
 
 import keyboard
-from directkeys import *
 import speech_recognition as sr
+from Mods.DirectKeys.directkeys import *
 from Mods.Controllers import Controller
 
 #instantiate Recognizer class
