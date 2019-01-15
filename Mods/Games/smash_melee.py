@@ -32,7 +32,7 @@ class AddOn():
                'c_right': ['see right', 'right smash'],
                }
 
-    def __init__(self, move, direction, modifier=None, mod_move=None, mod_time=None, wombo=True):
+    def __init__(self, move, direction, modifier=None, mod_move=None, mod_time=None, ):
         self.move = move
         self.direction = direction
         self.modifier = modifier
@@ -43,9 +43,6 @@ class AddOn():
         available_moves = {self.jab: buttons['a'], self.crouch: ['down'],
                            'shield': self.shield, 'grab': self.grab,
                            'wait': self.wait}
-
-        if wombo:
-            self.wombo_combo()
 
     def wombo_combo(self):
         if self.modifier:

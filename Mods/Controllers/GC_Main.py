@@ -56,8 +56,9 @@ class GC_Controller():
                                 self.down_c_press: buttons['c_down'], self.up_c_press: buttons['c_up'],
                                 self.left_c_press: buttons['c_left'], self.right_c_press: ['c_right'],
                                 self.hold: buttons['hold']}
-        #execute move
-        [i() for i, x in self.available_moves.items() for move in self.new_moves if move in x]
+        if self.execute:
+            #execute move
+            [i() for i, x in self.available_moves.items() for move in self.new_moves if move in x]
 
         def check_modifiers(move, incoming):
             """
