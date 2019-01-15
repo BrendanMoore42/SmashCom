@@ -6,33 +6,14 @@ Gamecube Controller Mod
 
 Super Smash Bros. Melee Controller Add-On
 """
+import time
 from directkeys import *
+from ..Controllers.StdController import Std_Controller
 
 # Super Smash Bros Melee
-class AddOn():
+class AddOn(Std_Controller):
 
-    buttons = {'a': ['jab', 'punch', 'slap', 'strike'],
-               'b': ['b', 'special', ],
-               'x': ['x', 'jump', 'colour'],
-               'y': buttons['x'],
-               'L': ['L', 'shield',],
-               'R': buttons['L'],
-               'z': ['Z', 'light shield', 'grab'],
-               'up': ['up'],
-               'down': ['down', 'crouch'],
-               'left': ['left', 'walk', 'run'],
-               'right': ['right', 'walk', 'run'],
-               'd_up': ['d-pad up', 'taunt'],
-               'd_down': ['d-pad down'],
-               'd_left': ['d-pad left'],
-               'd_right': ['d-pad right'],
-               'c_up': ['see up', 'up smash'],
-               'c_down': ['see down', 'down smash',],
-               'c_left': ['see left', 'left smash'],
-               'c_right': ['see right', 'right smash'],
-               }
-
-    def __init__(self, move, direction, modifier=None, mod_move=None, mod_time=None, ):
+    def __init__(self):
         self.move = move
         self.direction = direction
         self.modifier = modifier
@@ -40,17 +21,29 @@ class AddOn():
         self.mod_time = 1
         self.hold = 1
 
-        available_moves = {self.jab: buttons['a'], self.crouch: ['down'],
+        self.buttons = {'a': ['jab', 'punch', 'slap', 'strike'],
+                   'b': ['b', 'special', ],
+                   'x': ['x', 'jump', 'colour'],
+                   'y': self.buttons['x'],
+                   'L': ['L', 'shield', ],
+                   'R': self.buttons['L'],
+                   'z': ['Z', 'light shield', 'grab'],
+                   'up': ['up'],
+                   'down': ['down', 'crouch'],
+                   'left': ['left', 'walk', 'run'],
+                   'right': ['right', 'walk', 'run'],
+                   'd_up': ['d-pad up', 'taunt'],
+                   'd_down': ['d-pad down'],
+                   'd_left': ['d-pad left'],
+                   'd_right': ['d-pad right'],
+                   'c_up': ['see up', 'up smash'],
+                   'c_down': ['see down', 'down smash', ],
+                   'c_left': ['see left', 'left smash'],
+                   'c_right': ['see right', 'right smash']}
+
+        add_moves = {self.jab: self.buttons['a'], self.crouch: ['down'],
                            'shield': self.shield, 'grab': self.grab,
                            'wait': self.wait}
-
-    def wombo_combo(self):
-        if self.modifier:
-
-
-
-        if self.move == ''
-        print('sup')
 
 
     #Each function is a macro for a specific move
@@ -170,11 +163,13 @@ class AddOn():
 
         wombo_combo()
 
-moves = "hey up smash then hold shield for 4 seconds"
-move = "smash"
-direction = "up" # if not defined will default to last direction called
-modifier = "hold"
-mod_move = "sheild"
-mod_time = 4
+Std_Controller(AddOn)
 
-player = Move(move=move, direction=direction, modifier=modifier, mod_move=mod_move, mod_time=mod_time) # for debugs
+# moves = "hey up smash then hold shield for 4 seconds"
+# move = "smash"
+# direction = "up" # if not defined will default to last direction called
+# modifier = "hold"
+# mod_move = "sheild"
+# mod_time = 4
+#
+# player = AddOn(move=move, direction=direction, modifier=modifier, mod_move=mod_move, mod_time=mod_time) # for debugs

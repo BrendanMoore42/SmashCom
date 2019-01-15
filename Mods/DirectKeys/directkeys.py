@@ -7,27 +7,29 @@ import time
 
 SendInput = ctypes.windll.user32.SendInput
 
-#Custom Button mapping
+#Standard Controller Buttons
 A = 0x1E
 B = 0x30
 X = 0x2D
 Y = 0x15
 Z = 0x2C
-T = 0x14
+L1 = 0x10
+R1 = 0x11
+L2 = 0x10
+R2 = 0x11
 START = 0x31
 UP = 0x14
 DOWN = 0x22
 LEFT = 0x21
 RIGHT = 0x23
 CUP = 0x17
-CD = 0x25
-CL = 0x24
-CR = 0x26
-L = 0x10
-R = 0x11
+CDOWN = 0x25
+CLEFT = 0x24
+CRIGHT = 0x26
 DUP = 0x19
-COM = 0x32
-sp = 0x39
+DDOWN = 0x25
+DLEFT = 0x24
+DRIGHT = 0x26
 
 """
 Gamecube keys as follows;
@@ -68,8 +70,8 @@ class Input(ctypes.Structure):
     _fields_ = [("type", ctypes.c_ulong),
                 ("ii", Input_I)]
 
-# Actuals Functions
 
+# Actual Functions
 def PressKey(hexKeyCode):
     extra = ctypes.c_ulong(0)
     ii_ = Input_I()
@@ -84,8 +86,3 @@ def ReleaseKey(hexKeyCode):
     x = Input( ctypes.c_ulong(1), ii_ )
     ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
 
-if __name__ == '__main__':
-    PressKey(0x11)
-    time.sleep(1)
-    ReleaseKey(0x11)
-    time.sleep(1)

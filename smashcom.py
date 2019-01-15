@@ -12,13 +12,22 @@ import sys
 import keyboard
 from directkeys import *
 import speech_recognition as sr
-from GC_Main import GC_Controller
+from Mods.Controllers import Controller
 
 #instantiate Recognizer class
 r = sr.Recognizer()
 version = '1.0.5'
 
 class SmashCom():
+    """
+    To run SmashCom: create new SmashCom instance, be sure to specify mods or games if any, or defaults to
+    standard controller.
+    """
+
+    def __init__(self, controller, game):
+        self.controller = controller
+        self.game = game
+
 
     def lets_go(self):
         """
@@ -29,7 +38,7 @@ class SmashCom():
             try:
                 # Record audio
                 if keyboard.is_pressed('r'):
-                    self.show_me_your_moves()
+                    self.show_me_your_moves(self.controller, self.game)
                     break
                 # Quit program
                 if keyboard.is_pressed('q'):
@@ -39,7 +48,7 @@ class SmashCom():
         self.lets_go()
 
 
-    def show_me_your_moves(self):
+    def show_me_your_moves(self, controller, game):
         """
         Opens microphone to take speech then send to controller for function
         """
@@ -56,7 +65,21 @@ class SmashCom():
                 print(moves)
 
                 # run main fn
-                player = GC_Controller(moves=moves, execute=False)#, move=move, direction=direction, modifier=modifier, mod_move=mod_move, mod_time=mod_time)
+                player = Controller(moves=moves, execute=False)#, move=move, direction=direction, modifier=modifier, mod_move=mod_move, mod_time=mod_time)
                 # execute_moves(moves=moves)
             except:
                 pass
+
+
+# For Testing
+# main function
+def main(args):
+    """
+    args[1] = Controller
+    args[2] = Game
+    """
+    # create file names to use in functions
+    controller = args[1]
+    game = args[2]
+
+    debug_init = SmashCom(controller=controller, game=game)
