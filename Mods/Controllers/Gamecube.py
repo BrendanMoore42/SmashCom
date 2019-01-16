@@ -8,10 +8,11 @@ Standard moveset Mod- Gamecube Controller for Dolphin
 Games Supported Currently:
 Super Smash Bros. Melee
 """
+import sys
+sys.path.append("..")
 import time
-from .Controller import Controller
+from controller import Controller
 from DirectKeys.directkeys import *
-from ..Games import smash_melee
 
 # Add to button list to modify/add phrases
 buttons = {'a': ['a'],
@@ -223,12 +224,12 @@ class GC_Controller(Controller):
         #     print('sup')
         #
         # wombo_combo()
+# #
+# moves = "hey up smash then hold shield for 4 seconds"
+# move = "smash"
+# direction = "up" # if not defined will default to last direction called
+# modifier = "hold"
+# mod_move = "sheild"
+# mod_time = 4
 #
-moves = "hey up smash then hold shield for 4 seconds"
-move = "smash"
-direction = "up" # if not defined will default to last direction called
-modifier = "hold"
-mod_move = "sheild"
-mod_time = 4
-
-player = GC_Controller(game=smash_melee, moves=moves, execute=False)
+# player = GC_Controller(game=smash_melee, moves=moves, execute=False)

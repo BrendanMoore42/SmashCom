@@ -9,22 +9,22 @@ import sys
 import time
 import keyboard
 import speech_recognition as sr
-# from Mods.Controllers import Controller, Gamecube
-# from Mods.Controllers.DirectKeys.directkeys import *
+from Mods.Controllers import controller, gamecube
+from Mods.Controllers.DirectKeys.directkeys import *
 
 #instantiate Recognizer class
 r = sr.Recognizer()
 version = '1.0.6'
 
-# Approved mods, add here to add quick links to the controller
-# mods = {'gc': {Gamecube: {'ssbm': 'Super Smash Bros. Melee', }},
-#         'nes': {'NES': {'smb': 'Super Mario Bros.'}},
-#         'pc': {'PC': {'rl': 'Rocket League', }},
-#         }
+# Approved mods: add here to add quick links to the controller
+mods = {'gc': {Gamecube: {'ssbm': 'Super Smash Bros. Melee', }},
+        'nes': {'NES': {'smb': 'Super Mario Bros.'}},
+        'pc': {'PC': {'rl': 'Rocket League', }},
+        }
 
 class SmashCom():
     """
-    To run SmashCom: create new SmashCom instance, be sure to specify mods or games if any, or defaults to
+    To run SmashCom: Creates new SmashCom object, be sure to specify mods or games if any, or defaults to
     standard controller.
     """
 
@@ -74,20 +74,23 @@ class SmashCom():
             except:
                 pass
 
-
 # For Testing
 # main function
 def main(args):
     """
-    args[1] = Controller
-    args[2] = Game
+    args[1] = Game
+    args[2] = Controller
 
-    python smashcom.py gamecube melee
+    Run:
+    $ python smashcom.py melee
+
+    to specifiy controller, add as argument:
+    $ python smashcom.py melee gc
     """
 
     # create file names to use in functions
-    controller = args[1]
-    game = args[2]
+    game = args[1]
+    controller = args[2]
 
     if controller.lower() in mods.keys():
         print(controller)
@@ -96,7 +99,7 @@ def main(args):
     #debug_init = SmashCom(controller=controller, game=game)
 
 if __name__ == '__main__':
-    # temp_args = ['smashcom.py', 'gc', 'ssbm']
-    # main(temp_args)
-    sc = SmashCom()
-    sc.lets_go()
+    temp_args = ['smashcom.py', 'ssbm']
+    main(temp_args)
+    # sc = SmashCom()
+    # sc.lets_go()

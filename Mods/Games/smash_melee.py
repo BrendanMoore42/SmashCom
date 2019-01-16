@@ -6,20 +6,17 @@ Gamecube Controller Mod
 
 Super Smash Bros. Melee Controller Add-On
 """
+# to import controller and key classes
+import sys
+sys.path.append("..")
 import time
-from directkeys import *
-from ..Controllers.StdController import Std_Controller
+from Controllers.Gamecube import GC_Controller
+from Controllers.DirectKeys.directkeys import *
 
 # Super Smash Bros Melee
-class AddOn(Std_Controller):
+class AddOn(GC_Controller):
 
     def __init__(self):
-        self.move = move
-        self.direction = direction
-        self.modifier = modifier
-        self.mod_move = mod_move
-        self.mod_time = 1
-        self.hold = 1
 
         self.buttons = {'a': ['jab', 'punch', 'slap', 'strike'],
                    'b': ['b', 'special', ],
@@ -158,12 +155,7 @@ class AddOn(Std_Controller):
         PressKey(R)
         ReleaseKey(R), ReleaseKey(DOWN), ReleaseKey(RIGHT)
 
-        def wombo_combo(self, *moves):
-            print('sup')
 
-        wombo_combo()
-
-Std_Controller(AddOn)
 
 # moves = "hey up smash then hold shield for 4 seconds"
 # move = "smash"

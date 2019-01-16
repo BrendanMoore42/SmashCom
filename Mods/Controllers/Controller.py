@@ -6,8 +6,10 @@ Standard button moveset
 
 Can be ported to custom consoles and game-specific packs
 """
+# import sys
+# sys.path.append(".")
 import time
-from .DirectKeys.directkeys import *
+from DirectKeys.directkeys import *
 
 # Add to button list to modify/add phrases
 # key : list of strings to interpret
@@ -104,24 +106,9 @@ class Controller():
                 else:
                     pass
 
-        #
-        # if self.execute:
-        #     for move in self.new_moves:
-        #         if move in self.modifiers:
-        #             self.modifier, self.mod_move, self.mod_time = check_modifiers(move=move, incoming=self.moves)
-        #
-        #
-        #
-        #             [i() for i, x in self.available_moves.items() if move in x]
-
-
     def _execute_moves(self, move, direction, modifier=False):
 
-        if modifier:
-
-        if self.move in self.modifiers:
-
-            [i() for i, x in self.available_moves.items() if self.move in x]
+        [i(move, direction) for i, x in self.available_moves.items() if self.move in x]
 
 
     def a_press(self, ):
@@ -224,8 +211,6 @@ class Controller():
         time.sleep(0.25)
         ReleaseKey(RIGHT)
         ReleaseKey(A)
-
-
 
 
 #
