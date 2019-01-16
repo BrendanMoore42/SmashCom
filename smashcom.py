@@ -9,18 +9,18 @@ import sys
 import time
 import keyboard
 import speech_recognition as sr
-from Mods.Controllers import Controller, Gamecube
-from Mods.Controllers.DirectKeys.directkeys import *
+# from Mods.Controllers import Controller, Gamecube
+# from Mods.Controllers.DirectKeys.directkeys import *
 
 #instantiate Recognizer class
 r = sr.Recognizer()
 version = '1.0.6'
 
 # Approved mods, add here to add quick links to the controller
-mods = {'gc': {Gamecube: {'ssbm': 'Super Smash Bros. Melee', }},
-        'nes': {'NES': {'smb': 'Super Mario Bros.'}},
-        'pc': {'PC': {'rl': 'Rocket League', }},
-        }
+# mods = {'gc': {Gamecube: {'ssbm': 'Super Smash Bros. Melee', }},
+#         'nes': {'NES': {'smb': 'Super Mario Bros.'}},
+#         'pc': {'PC': {'rl': 'Rocket League', }},
+#         }
 
 class SmashCom():
     """
@@ -69,7 +69,7 @@ class SmashCom():
                 print(moves)
 
                 # run main fn
-                player = Controller(moves=moves, execute=False)#, move=move, direction=direction, modifier=modifier, mod_move=mod_move, mod_time=mod_time)
+               # player = Controller(moves=moves, execute=False)#, move=move, direction=direction, modifier=modifier, mod_move=mod_move, mod_time=mod_time)
                 # execute_moves(moves=moves)
             except:
                 pass
@@ -96,5 +96,7 @@ def main(args):
     #debug_init = SmashCom(controller=controller, game=game)
 
 if __name__ == '__main__':
-    temp_args = ['smashcom.py', 'gc', 'ssbm']
-    main(temp_args)
+    # temp_args = ['smashcom.py', 'gc', 'ssbm']
+    # main(temp_args)
+    sc = SmashCom()
+    sc.lets_go()

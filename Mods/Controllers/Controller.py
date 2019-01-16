@@ -41,13 +41,12 @@ class Controller():
         self._mod_move = None
         self._mod_time = None
 
-        # int value is where controller looks for number to convert
         # example: hold shield for 4 seconds
-        self.modifiers = {'inputs': ['wait', 'hold', 'press',],
+        self.modifiers = {'inputs': ['wait', 'hold', 'press', 'hit', ],
                           'pointer': ['side', 'smash', 'tilt',],
                           'direction': ['up', 'down', 'left', 'right'],
-                          'other': ['tap', 'mash', 'half',],
-                          'action': ['run', 'go',]}
+                          'other': ['tap', 'mash', 'half', 'degrees'],
+                          'action': ['run', 'go', 'walk']}
 
         # add custom functions here with a list of terms
         self.available_moves = {self.a_press: buttons["a"], self.b_press: buttons["b"],
@@ -59,13 +58,13 @@ class Controller():
                                 self.left_c_press: buttons['c_left'], self.right_c_press: ['c_right']}
         if self.execute:
             for move in self.new_moves:
-                for action, word in self.available_moves.values():
-                    if move in word:
+                for action, button in self.available_moves.values():
+                    if move in button:
                         self._set_modifiers(move=move)
                         self._execute_moves(move=self.moves, direction=self._direction, mod_move=self.mod_move, mod_time=self.mod_time)
 
             #execute move
-            #awesome one linrer that won't work
+            #awesome one liner that won't work --> speech modifiers in the way
             # [i(direction=self._direction, mod_move=self.mod_move, mod_time=self.mod_time) for i, x in self.available_moves.items() for move in self.new_moves if move in x]
         else:
             print('First pass next')
