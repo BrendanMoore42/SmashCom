@@ -73,11 +73,16 @@ class Controller():
 
         def _set_modifiers(move=None):
             """
-            Assign values for modified moves and directions
+            Assign values for modified moves and directions.
+            If no mods returns None for variables
             :param move: Modifier move to set modifier terms
             :param incoming: Move list coming in from main function
             :return:
             """
+            num_to_int = {'one': 1, 'two': 2, 'three': 3,
+                          'four': 4, 'five': 5, 'six': 6,
+                          'seven': 7, 'eight': 8, 'nine': 9,
+                          'ten': 10, 'half': 0.5}
             if move:
                 if move in self.modifiers:
                     self._modifier = move
@@ -92,10 +97,13 @@ class Controller():
                         # return the value to modify move
                         modifier_out = num_to_int[modifier_index]
                     except:
-                        # set default values if
                         self._modifier = None
                         self._mod_move = None
                         self._mod_time = None
+
+
+                else:
+                    pass
 
         #
         # if self.execute:
