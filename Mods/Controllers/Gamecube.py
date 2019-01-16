@@ -4,12 +4,14 @@ date: Jan 12, 2019
 
 Standard moveset Mod- Gamecube Controller for Dolphin
 
+# add game here and in import statement
 Games Supported Currently:
 Super Smash Bros. Melee
 """
 import time
-from directkeys import *
-# from smash_melee import AddOn
+from .Controller import Controller
+from DirectKeys.directkeys import *
+from ..Games import smash_melee
 
 # Add to button list to modify/add phrases
 buttons = {'a': ['a'],
@@ -33,28 +35,29 @@ buttons = {'a': ['a'],
            'c_right': ['see up'],
            }
 
-class GC_Controller():
-    def __init__(self, moves):
+class GC_Controller(Controller):
+    def __init__(self, game, moves, execute=True):
+        self.game = game
         self.moves = moves
         self.new_moves = moves.split(' ')
+        self.execute = execute
         self.direction = direction
         self.modifier = None
         self.mod_move = None
         self.mod_time = None
-        self.execute = True
         self.hold = 1
 
         # int value is where controller looks for number to convert
         # example: hold shield for 4 seconds
         self.modifiers = {'wait', 'hold', 'press', 'side', 'smash', 'tilt', 'tap', 'mash', 'half', 'trigger'}
-        self.available_moves = {self.a_press: buttons["a"], self.b_press: buttons["b"],
-                                self.down_press: buttons['down'], self.up_press: buttons['up'],
-                                self.left_press: buttons['left'], self.right_press: ['right'],
-                                self.down_pad_press: buttons['d_down'], self.up_pad_press: buttons['d_up'],
-                                self.left_pad_press: buttons['d_left'], self.right_pad_press: ['d_right'],
-                                self.down_c_press: buttons['c_down'], self.up_c_press: buttons['c_up'],
-                                self.left_c_press: buttons['c_left'], self.right_c_press: ['c_right'],
-                                self.hold: buttons['hold']}
+        # self.available_moves = {self.a_press: buttons["a"], self.b_press: buttons["b"],
+        #                         self.down_press: buttons['down'], self.up_press: buttons['up'],
+        #                         self.left_press: buttons['left'], self.right_press: ['right'],
+        #                         self.down_pad_press: buttons['d_down'], self.up_pad_press: buttons['d_up'],
+        #                         self.left_pad_press: buttons['d_left'], self.right_pad_press: ['d_right'],
+        #                         self.down_c_press: buttons['c_down'], self.up_c_press: buttons['c_up'],
+        #                         self.left_c_press: buttons['c_left'], self.right_c_press: ['c_right'],
+        #                         self.hold: buttons['hold']}
         if self.execute:
             #execute move
             [i() for i, x in self.available_moves.items() for move in self.new_moves if move in x]
@@ -216,11 +219,11 @@ class GC_Controller():
         PressKey(R)
         ReleaseKey(R), ReleaseKey(DOWN), ReleaseKey(RIGHT)
 
-        def wombo_combo(self, *moves):
-            print('sup')
-
-        wombo_combo()
-
+        # def wombo_combo(self, *moves):
+        #     print('sup')
+        #
+        # wombo_combo()
+#
 moves = "hey up smash then hold shield for 4 seconds"
 move = "smash"
 direction = "up" # if not defined will default to last direction called
@@ -228,4 +231,4 @@ modifier = "hold"
 mod_move = "sheild"
 mod_time = 4
 
-player = GC_Controller(moves=moves)
+player = GC_Controller(game=smash_melee, moves=moves, execute=False)

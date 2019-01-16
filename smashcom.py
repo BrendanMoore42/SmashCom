@@ -5,22 +5,21 @@ date: Jan 11, 2019
 
 SmashComm: Control the game.
 """
-import time
-# from moves import *
 import sys
+import time
 import keyboard
 import speech_recognition as sr
-from Mods.DirectKeys.directkeys import *
-# from Mods.Controllers import *
+from Mods.Controllers import Controller, Gamecube
+from Mods.Controllers.DirectKeys.directkeys import *
 
 #instantiate Recognizer class
 r = sr.Recognizer()
 version = '1.0.6'
 
 # Approved mods, add here to add quick links to the controller
-mods = {'gc': {'melee': 'Super Smash Bros. Melee', },
-        'nes': {'sbm': 'Super Mario Bros.'},
-        'pc': {'rl': 'Rocket League', },
+mods = {'gc': {Gamecube: {'ssbm': 'Super Smash Bros. Melee', }},
+        'nes': {'NES': {'smb': 'Super Mario Bros.'}},
+        'pc': {'PC': {'rl': 'Rocket League', }},
         }
 
 class SmashCom():
@@ -97,5 +96,5 @@ def main(args):
     #debug_init = SmashCom(controller=controller, game=game)
 
 if __name__ == '__main__':
-    temp_args = ['smashcom.py', 'gc', 'melee']
+    temp_args = ['smashcom.py', 'gc', 'ssbm']
     main(temp_args)

@@ -7,7 +7,7 @@ Standard button moveset
 Can be ported to custom consoles and game-specific packs
 """
 import time
-from SmashCom.DirectKeys.directkeys import *
+from .DirectKeys.directkeys import *
 
 # Add to button list to modify/add phrases
 # key : list of strings to interpret
@@ -33,18 +33,22 @@ buttons = {'a': ['a'],
            }
 
 class Controller():
-    def __init__(self, moves):
+    def __init__(self, moves, execute=True):
         self.moves = moves
         self.new_moves = moves.split(' ')
-        self.direction = direction
-        self.modifier = None
-        self.mod_move = None
-        self.mod_time = None
-        self.execute = True
+        self._direction = None
+        self._modifier = None
+        self._mod_move = None
+        self._mod_time = None
 
         # int value is where controller looks for number to convert
         # example: hold shield for 4 seconds
-        self.modifiers = {'wait', 'hold', 'press', 'side', 'smash', 'tilt', 'tap', 'mash', 'half', 'trigger'}
+        self.modifiers = {'inputs': ['wait', 'hold', 'press',],
+                          'pointer': ['side', 'smash', 'tilt',],
+                          'direction': ['up', 'down', 'left', 'right'],
+                          'other': ['tap', 'mash', 'half',],
+                          'action': ['run', 'go',]}
+
         # add custom functions here with a list of terms
         self.available_moves = {self.a_press: buttons["a"], self.b_press: buttons["b"],
                                 self.down_press: buttons['down'], self.up_press: buttons['up'],
@@ -52,60 +56,65 @@ class Controller():
                                 self.down_pad_press: buttons['d_down'], self.up_pad_press: buttons['d_up'],
                                 self.left_pad_press: buttons['d_left'], self.right_pad_press: ['d_right'],
                                 self.down_c_press: buttons['c_down'], self.up_c_press: buttons['c_up'],
-                                self.left_c_press: buttons['c_left'], self.right_c_press: ['c_right'],
-                                self.hold: buttons['hold']}
+                                self.left_c_press: buttons['c_left'], self.right_c_press: ['c_right']}
         if self.execute:
+            for move in self.new_moves:
+                for action, word in self.available_moves.values():
+                    if move in word:
+                        self._set_modifiers(move=move)
+                        self._execute_moves(move=self.moves, direction=self._direction, mod_move=self.mod_move, mod_time=self.mod_time)
+
             #execute move
-            [i() for i, x in self.available_moves.items() for move in self.new_moves if move in x]
+            #awesome one linrer that won't work
+            # [i(direction=self._direction, mod_move=self.mod_move, mod_time=self.mod_time) for i, x in self.available_moves.items() for move in self.new_moves if move in x]
         else:
             print('First pass next')
 
-        def check_modifiers(move, incoming):
+
+        def _set_modifiers(move=None):
             """
-            Assign values for modified moves
+            Assign values for modified moves and directions
             :param move: Modifier move to set modifier terms
             :param incoming: Move list coming in from main function
             :return:
             """
-            modifier = move
-
-            # get specified number
-            try:
-                # returns int value from text
-                word_index = moves.index(word)
-                # get value for modifier to check where number should be
-                mod_value = [i for i, x in self.modifiers.items() if word in x]
-                # search through the incoming moves to find number to convert
-                modifier_index = moves[word_index + mod_value]
-                # return the value to modify move
-                modifier_out = num_to_int[modifier_index]
-            except:
-                # defaults to 1 if translation fails
-                modifier_out = 1
-
-
-            return modifier, mod_move, mod_time
-
-        if self.execute:
-            for move in self.new_moves:
+            if move:
                 if move in self.modifiers:
-                    self.modifier, self.mod_move, self.mod_time = check_modifiers(move=move, incoming=self.moves)
+                    self._modifier = move
+                    # get specified number
+                    try:
+                        # returns int value from text
+                        word_index = moves.index(word)
+                        # get value for modifier to check where number should be
+                        mod_value = [i for i, x in self.modifiers.items() if word in x]
+                        # search through the incoming moves to find number to convert
+                        modifier_index = moves[word_index + mod_value]
+                        # return the value to modify move
+                        modifier_out = num_to_int[modifier_index]
+                    except:
+                        # set default values if
+                        self._modifier = None
+                        self._mod_move = None
+                        self._mod_time = None
+
+        #
+        # if self.execute:
+        #     for move in self.new_moves:
+        #         if move in self.modifiers:
+        #             self.modifier, self.mod_move, self.mod_time = check_modifiers(move=move, incoming=self.moves)
+        #
+        #
+        #
+        #             [i() for i, x in self.available_moves.items() if move in x]
 
 
+    def _execute_moves(self, move, direction, modifier=False):
 
-                    [i() for i, x in self.available_moves.items() if move in x]
-
-
-    def execute_moves(self):
+        if modifier:
 
         if self.move in self.modifiers:
 
             [i() for i, x in self.available_moves.items() if self.move in x]
-
-
-    #Each function is a macro for a specific move
-    def wait(self, wait):
-        time.sleep(wait)
 
 
     def a_press(self, ):
@@ -113,6 +122,31 @@ class Controller():
         PressKey(A)
         time.sleep(0.1)
         ReleaseKey(A)
+
+
+    def b_press(self, ):
+
+        PressKey(A)
+        time.sleep(0.1)
+        ReleaseKey(A)
+
+
+    def r_press(self):
+        PressKey(R)
+        time.sleep(2)
+        ReleaseKey(R)
+
+
+    def l_press(self):
+        PressKey(L)
+        time.sleep(2)
+        ReleaseKey(L)
+
+
+    def z_press(self):
+        PressKey(Z)
+        time.sleep(0.05)
+        ReleaseKey(Z)
 
 
     def up(self):
@@ -123,7 +157,7 @@ class Controller():
 
     def left(self):
         PressKey(LEFT)
-        time.sleep(0.1)#To alter timing of presses
+        time.sleep(0.1)#To alter timing of presses self.modifier
         ReleaseKey(LEFT)
 
 
@@ -133,19 +167,19 @@ class Controller():
         ReleaseKey(RIGHT)
 
 
-    def crouch(self):
+    def down(self):
         PressKey(DOWN)
         time.sleep(0.1)
         ReleaseKey(DOWN)
 
 
-    def jab(self):
+    def up_pad_press(self):
         PressKey(A)
         time.sleep(0.05)
         ReleaseKey(A)
 
 
-    def djab(self):
+    def down_pad_press(self):
         PressKey(A)
         ReleaseKey(A)
         time.sleep(0.05)
@@ -153,19 +187,7 @@ class Controller():
         ReleaseKey(A)
 
 
-    def shield(self):
-        PressKey(R)
-        time.sleep(2)
-        ReleaseKey(R)
-
-
-    def grab(self):
-        PressKey(Z)
-        time.sleep(0.05)
-        ReleaseKey(Z)
-
-
-    def Rsmash(self):
+    def c_up_press(self):
         PressKey(RIGHT)
         PressKey(A)
         time.sleep(0.25)
@@ -173,48 +195,31 @@ class Controller():
         ReleaseKey(A)
 
 
-    def Lsmash(self):
-        PressKey(LEFT)
+    def c_down_press(self):
+        PressKey(RIGHT)
         PressKey(A)
         time.sleep(0.25)
-        ReleaseKey(LEFT)
+        ReleaseKey(RIGHT)
         ReleaseKey(A)
 
-    def b_press(self):
-        PressKey(B)
-        time.sleep(0.05)
-        ReleaseKey(B)
 
-    def shdl(self):
-        PressKey(Y)
-        PressKey(B)
-        ReleaseKey(B)
-        PressKey(B)
-        ReleaseKey(B)
+    def c_left_press(self):
+        PressKey(RIGHT)
+        PressKey(A)
+        time.sleep(0.25)
+        ReleaseKey(RIGHT)
+        ReleaseKey(A)
 
 
-    def shine(self):
-        PressKey(DOWN)
-        PressKey(B)
-        time.sleep(0.05)
-        ReleaseKey(DOWN)
-        ReleaseKey(B)
+    def c_right_press(self):
+        PressKey(RIGHT)
+        PressKey(A)
+        time.sleep(0.25)
+        ReleaseKey(RIGHT)
+        ReleaseKey(A)
 
 
-    def wd_left(self):
-        PressKey(X)
-        time.sleep(0.05)
-        PressKey(DOWN), PressKey(LEFT)
-        PressKey(R)
-        ReleaseKey(R), ReleaseKey(DOWN), ReleaseKey(LEFT)
 
-
-    def wd_right(self):
-        PressKey(X)
-        time.sleep(0.05)
-        PressKey(DOWN), PressKey(RIGHT)
-        PressKey(R)
-        ReleaseKey(R), ReleaseKey(DOWN), ReleaseKey(RIGHT)
 
 #
 # moves = "hey up smash then hold shield for 4 seconds"
