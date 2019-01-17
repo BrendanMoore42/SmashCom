@@ -71,13 +71,6 @@ class Controller():
             print('First pass next')
 
 
-    def merge_dicts(self, ds):
-
-        merge = lambda vs: list(map(sum, zip(*vs)))
-        keys = set.union(*map(set, ds))
-        return {k: merge(map(lambda d: d.get(k, repeat(0)), ds))
-                for k in keys}
-
     def _set_direction(self, direction):
         self._direction = direction
 
@@ -257,13 +250,12 @@ class Controller():
         ReleaseKey(A)
 
 
-#
 moves = "press stick left for ten seconds then down for three seconds"
 moves1 = "run right and press a button three times"
 move = "stick"
 direction = "left" # if not defined will default to last direction called
 modifier = "press"
-# mod_move = "shield"
+mod_move = "shield"
 mod_time = 10
 
 player = Controller(moves=moves)
