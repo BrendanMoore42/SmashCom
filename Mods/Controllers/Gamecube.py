@@ -8,11 +8,10 @@ Standard moveset Mod- Gamecube Controller for Dolphin
 Games Supported Currently:
 Super Smash Bros. Melee
 """
-import sys
-sys.path.append("..")
 import time
-from controller import Controller
-from DirectKeys.directkeys import *
+from .controller import Controller
+from ..Games import smash_melee
+from ..DirectKeys.directkeys import *
 
 # Add to button list to modify/add phrases
 buttons = {'a': ['a'],
@@ -36,17 +35,18 @@ buttons = {'a': ['a'],
            'c_right': ['see up'],
            }
 
+# Add games
+games = [smash_melee, ]
+
 class GC_Controller(Controller):
     def __init__(self, game, moves, execute=True):
         self.game = game
         self.moves = moves
         self.new_moves = moves.split(' ')
         self.execute = execute
-        self.direction = direction
         self.modifier = None
         self.mod_move = None
         self.mod_time = None
-        self.hold = 1
 
         # int value is where controller looks for number to convert
         # example: hold shield for 4 seconds

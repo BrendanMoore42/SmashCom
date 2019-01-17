@@ -7,17 +7,14 @@ Gamecube Controller Mod
 Super Smash Bros. Melee Controller Add-On
 """
 # to import controller and key classes
-import sys
-sys.path.append("..")
 import time
-from Controllers.Gamecube import GC_Controller
-from Controllers.DirectKeys.directkeys import *
+from ..DirectKeys.directkeys import *
+from ..Controllers.gamecube import GC_Controller
 
 # Super Smash Bros Melee
 class AddOn(GC_Controller):
 
     def __init__(self):
-
         self.buttons = {'a': ['jab', 'punch', 'slap', 'strike'],
                    'b': ['b', 'special', ],
                    'x': ['x', 'jump', 'colour'],

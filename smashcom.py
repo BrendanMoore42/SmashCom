@@ -9,15 +9,15 @@ import sys
 import time
 import keyboard
 import speech_recognition as sr
-from Mods.Controllers import controller, gamecube
-from Mods.Controllers.DirectKeys.directkeys import *
+from Mods.Controllers.controller import Controller
+from Mods.DirectKeys.directkeys import *
 
 #instantiate Recognizer class
 r = sr.Recognizer()
 version = '1.0.6'
 
 # Approved mods: add here to add quick links to the controller
-mods = {'gc': {Gamecube: {'ssbm': 'Super Smash Bros. Melee', }},
+mods = {'gc': {GC_Controller: {'ssbm': 'Super Smash Bros. Melee', }},
         'nes': {'NES': {'smb': 'Super Mario Bros.'}},
         'pc': {'PC': {'rl': 'Rocket League', }},
         }

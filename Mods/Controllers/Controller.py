@@ -6,33 +6,10 @@ Standard button moveset
 
 Can be ported to custom consoles and game-specific packs
 """
-# import sys
-# sys.path.append(".")
 import time
-from DirectKeys.directkeys import *
+from ..DirectKeys.directkeys import *
+from .gamecube import GC_Controller
 
-# Add to button list to modify/add phrases
-# key : list of strings to interpret
-buttons = {'a': ['a'],
-           'b': ['b'],
-           'x': ['x'],
-           'y': ['y'],
-           'L': ['l'],
-           'R': ['r'],
-           'z': ['z'],
-           'up': ['up'],
-           'down': ['down'],
-           'left': ['left'],
-           'right': ['up'],
-           'd_up': ['d-pad up'],
-           'd_down': ['d-pad down'],
-           'd_left': ['d-pad left'],
-           'd_right': ['d-pad up'],
-           'c_up': ['see up'],
-           'c_down': ['see down'],
-           'c_left': ['see left'],
-           'c_right': ['see up'],
-           }
 
 class Controller():
     def __init__(self, moves, execute=True):
@@ -41,29 +18,32 @@ class Controller():
         self._direction = None
         self._modifier = None
         self._mod_move = None
-        self._mod_time = None
+        self._mod_value = 0
+
+        # Add to button/analog list to modify/add inputs
+        self.buttons = {'button': ['a', 'b', 'x', 'y', 'l1', 'l2', 'r1' 'r2', 'z']}
+
+        self.analog = {'analog': ['stick', 'd_pad', 'c_pad']}
 
         # example: hold shield for 4 seconds
         self.modifiers = {'inputs': ['wait', 'hold', 'press', 'hit', ],
+                          'multiplier': ['times'],
                           'pointer': ['side', 'smash', 'tilt',],
                           'direction': ['up', 'down', 'left', 'right'],
                           'other': ['tap', 'mash', 'half', 'degrees'],
                           'action': ['run', 'go', 'walk']}
 
         # add custom functions here with a list of terms
-        self.available_moves = {self.a_press: buttons["a"], self.b_press: buttons["b"],
-                                self.down_press: buttons['down'], self.up_press: buttons['up'],
-                                self.left_press: buttons['left'], self.right_press: ['right'],
-                                self.down_pad_press: buttons['d_down'], self.up_pad_press: buttons['d_up'],
-                                self.left_pad_press: buttons['d_left'], self.right_pad_press: ['d_right'],
-                                self.down_c_press: buttons['c_down'], self.up_c_press: buttons['c_up'],
-                                self.left_c_press: buttons['c_left'], self.right_c_press: ['c_right']}
+        self.available_moves = {self.button_press: self.buttons['button'],
+                                self.analog_input: self.analog['stick']}
+
         if self.execute:
             for move in self.new_moves:
                 for action, button in self.available_moves.values():
                     if move in button:
                         self._set_modifiers(move=move)
-                        self._execute_moves(move=self.moves, direction=self._direction, mod_move=self.mod_move, mod_time=self.mod_time)
+                        if self._modifier:
+                            self._execute_moves(move=self.moves, direction=self._direction, mod_move=self.mod_move, mod_time=self.mod_time)
 
             #execute move
             #awesome one liner that won't work --> speech modifiers in the way
@@ -72,43 +52,72 @@ class Controller():
             print('First pass next')
 
 
-        def _set_modifiers(move=None):
-            """
-            Assign values for modified moves and directions.
-            If no mods returns None for variables
-            :param move: Modifier move to set modifier terms
-            :param incoming: Move list coming in from main function
-            :return:
-            """
-            num_to_int = {'one': 1, 'two': 2, 'three': 3,
-                          'four': 4, 'five': 5, 'six': 6,
-                          'seven': 7, 'eight': 8, 'nine': 9,
-                          'ten': 10, 'half': 0.5}
-            if move:
-                if move in self.modifiers:
-                    self._modifier = move
-                    # get specified number
-                    try:
-                        # returns int value from text
-                        word_index = moves.index(word)
-                        # get value for modifier to check where number should be
-                        mod_value = [i for i, x in self.modifiers.items() if word in x]
-                        # search through the incoming moves to find number to convert
-                        modifier_index = moves[word_index + mod_value]
-                        # return the value to modify move
-                        modifier_out = num_to_int[modifier_index]
-                    except:
-                        self._modifier = None
-                        self._mod_move = None
-                        self._mod_time = None
+    def _set_direction(self, direction):
+        self._direction = direction
+
+    def _clear_modifiers(self):
+        """Reset modifiers if none present"""
+        self._modifier = None
+        self._mod_move = None
+        self._mod_value = 0
 
 
-                else:
-                    pass
+    def _set_modifiers(self, move=None):
+        """
+        Assign values for modified moves and directions.
+        If no mods returns None for variables
+        :param move: Modifier move to set modifier terms
+        :param incoming: Move list coming in from main function
+        :return:
+        """
+        num_to_int = {'one': 1, 'two': 2, 'three': 3,
+                      'four': 4, 'five': 5, 'six': 6,
+                      'seven': 7, 'eight': 8, 'nine': 9,
+                      'ten': 10, 'half': 0.5}
 
-    def _execute_moves(self, move, direction, modifier=False):
+        if move:
+            if move in self.modifiers:
+                self._modifier = move
+                # get specified number
+                try:
+                    if move in self.modifiers['inputs']:
+                        self._mod_value
+                    if move in self.modifiers['pointer']:
 
-        [i(move, direction) for i, x in self.available_moves.items() if self.move in x]
+                    if move in self.modifiers['direction']:
+
+                    if move in self.modifiers['other']:
+
+                    if move in self.modifiers['action']:
+
+
+
+                    # returns int value from text
+                    word_index = self.moves.index(move)
+                    # get value for modifier to check where number should be
+                    mod_value = [i for i, x in self.modifiers.items() if move in x]
+                    # search through the incoming moves to find number to convert
+                    modifier_index = self.moves[word_index + mod_value]
+                    # return the value to modify move
+                    modifier_out = num_to_int[modifier_index]
+                    self._execute_moves()
+                except:
+                    self._clear_modifiers()
+            else:
+                self._clear_modifiers()
+
+
+    def _execute_moves(self, move):
+        pass
+        # [i(move, direction) for i, x in self.available_moves.items() if move in x]
+
+
+    def button_press(self, button, ):
+        pass
+
+
+    def analog_press(self):
+        pass
 
 
     def a_press(self, ):
