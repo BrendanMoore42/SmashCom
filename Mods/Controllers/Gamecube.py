@@ -38,7 +38,7 @@ buttons = {'a': ['a'],
 # Add games
 games = [smash_melee, ]
 
-class GC_Controller(Controller):
+class GC_Controller():
     def __init__(self, game, moves, execute=True):
         self.game = game
         self.moves = moves

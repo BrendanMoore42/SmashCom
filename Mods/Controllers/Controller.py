@@ -9,8 +9,14 @@ Can be ported to custom consoles and game-specific packs
 import time
 import itertools as it
 from DirectKeys.directkeys import *
-# from gamecube import GC_Controller
+from .gamecube import GC_Controller
 
+
+# Approved mods: add here to add quick links to the controller
+mods = {'gc': {GC_Controller: {'ssbm': 'Super Smash Bros. Melee', }},
+        'nes': {'NES': {'smb': 'Super Mario Bros.'}},
+        'pc': {'PC': {'rl': 'Rocket League', }},
+        }
 
 class Controller():
     def __init__(self, moves):

@@ -16,11 +16,6 @@ from Mods.DirectKeys.directkeys import *
 r = sr.Recognizer()
 version = '1.0.6'
 
-# Approved mods: add here to add quick links to the controller
-mods = {'gc': {GC_Controller: {'ssbm': 'Super Smash Bros. Melee', }},
-        'nes': {'NES': {'smb': 'Super Mario Bros.'}},
-        'pc': {'PC': {'rl': 'Rocket League', }},
-        }
 
 class SmashCom():
     """
