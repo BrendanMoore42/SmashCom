@@ -34,27 +34,36 @@ class Controller():
                           'multiplier': ['times'],
                           'pointer': ['side', 'smash', 'tilt',],
                           'direction': ['up', 'down', 'left', 'right'],
-                          'other': ['tap', 'mash', 'half', 'degrees'],
-                          'action': ['run', 'go', 'walk']}
+                          'other': ['tap', 'mash', 'half', 'degrees', 'seconds'],
+                          'action': ['run', 'go', 'walk'],
+                          'buttons': self.buttons['button'],
+                          'analog': self.analog['analog']}
 
         # add custom functions here with a list of terms
         self.available_moves = {self.button_press: self.buttons['button'],
                                 self.analog_input: self.analog['analog'],
                                 self._set_modifiers: list(it.chain.from_iterable(self.modifiers.values()))}
 
-        # debug stop
+        # debug for stopping during tests
         if self.execute:
-            # iterate through each move and look for match in controller/modifier dictionaries
+            # look for modifiers first
             for move in self.new_moves:
-                print(move)
-                for action, button in self.available_moves.items():
-                    # move will execute the function, or branch further if modifier present
-                    if move in button:
-                        action()
-                        self._set_modifiers(move=move)
-                        # if self._modifier:
-                        #     self._execute_moves(move=self.moves, direction=self._direction, mod_move=self.mod_move, mod_time=self.mod_time)
 
+                try:
+                    if move in list(it.chain.from_iterable(self.modifiers.values())):
+                        print(move + '!')
+                        self._set_modifiers(move=move)
+
+                    # for action, button in self.available_moves.items():
+                    #     # move will execute the function, or branch further if modifier present
+                    #     if move in button:
+                    #         action()
+                    #         self._set_modifiers(move=move)
+                            # if self._modifier:
+                            #     self._execute_moves(move=self.moves, direction=self._direction, mod_move=self.mod_move, mod_time=self.mod_time)
+                # iterate through each move and look for match in controller/modifier dictionaries
+                except:
+                    print('not a modifier')
             #execute move
             #awesome one liner that won't work --> speech modifiers in the way
             # [i(direction=self._direction, mod_move=self.mod_move, mod_time=self.mod_time) for i, x in self.available_moves.items() for move in self.new_moves if move in x]
@@ -62,8 +71,16 @@ class Controller():
             print('First pass next')
 
 
+    def merge_dicts(self, ds):
+
+        merge = lambda vs: list(map(sum, zip(*vs)))
+        keys = set.union(*map(set, ds))
+        return {k: merge(map(lambda d: d.get(k, repeat(0)), ds))
+                for k in keys}
+
     def _set_direction(self, direction):
         self._direction = direction
+
 
     def _clear_modifiers(self):
         """Reset modifiers if none present"""
@@ -241,7 +258,8 @@ class Controller():
 
 
 #
-moves = "press stick left for ten seconds then down for three"
+moves = "press stick left for ten seconds then down for three seconds"
+moves1 = "run right and press a button three times"
 move = "stick"
 direction = "left" # if not defined will default to last direction called
 modifier = "press"
