@@ -9,9 +9,9 @@ Games Supported Currently:
 Super Smash Bros. Melee
 """
 import time
-from .controller import Controller
-from ..Games import smash_melee
-from ..DirectKeys.directkeys import *
+# from controller import Controller
+# from Mods.Controllers.DirectKeys.directkeys import *
+import Mods.Games.smash_melee
 
 # Add to button list to modify/add phrases
 buttons = {'a': ['a'],
