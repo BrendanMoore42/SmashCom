@@ -87,10 +87,19 @@ class Controller():
     def _replace_phrases(self, moves):
         """
         Takes the moves list and replaces phrases with key pair for move execution
-        :param moves:
+        :param moves: list
         """
+        
+        # turn all str int to int
+        def replace_numbers(moves):
+            """Replace alphanumeric values"""
+            num_to_replace = {'1': ['one', 'once', 'half'], '2': ['two', 'twice'], '3': ['three', 'thrice'],
+                              '4': 'four', '5': 'five', '6': 'six',
+                              '7': 'seven', '8': 'eight', '9': 'nine',
+                              '10': 'ten'} # if half, make 1 and then half as a boolean in function call when hold is called
 
-        def _generate_ngrams(moves, n):
+
+        def generate_ngrams(moves, n):
             """Generates list of ngrams from moves with n value"""
             # Convert to lowercases
             moves = moves.lower()
@@ -108,7 +117,7 @@ class Controller():
 
 
 
-        bigram_list = _generate_ngrams(moves, 2)
+        bigram_list = generate_ngrams(moves, 2)
 
         for phrase in bigram_list:
             for mod, mod_list in self.mod_phrases.items():
