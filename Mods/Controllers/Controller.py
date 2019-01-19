@@ -6,10 +6,11 @@ Standard button moveset
 
 Can be ported to custom consoles and game-specific packs
 """
+import re
 import time
 import itertools as it
 from DirectKeys.directkeys import *
-from .gamecube import GC_Controller
+from Mods.Controllers.gamecube import GC_Controller
 
 
 # Approved mods: add here to add quick links to the controller
@@ -20,7 +21,7 @@ mods = {'gc': {GC_Controller: {'ssbm': 'Super Smash Bros. Melee', }},
 
 class Controller():
     def __init__(self, moves):
-        self.moves = moves
+        self.moves = moves.lower()
         self.new_moves = moves.split(' ')
         self._direction = None
         self._modifier = None
@@ -31,14 +32,16 @@ class Controller():
 
         # Add to button/analog list to modify/add inputs
         self.buttons = {'button': ['a', 'b', 'x', 'y', 'l1', 'l2', 'r1' 'r2', 'z']}
-        self.analog = {'analog': ['stick', 'd_pad', 'c_pad']}
+        self.analog = {'analog': ['stick', 'dpad', 'cstick']}
+
         # Add macros and custom functions here
-        self.extra_moves ={None: ['']}
+        self.mod_phrases = {'dpad': ['d-pad', 'd pad'],
+                            'cstick': ['c stick', 'c-stick', 'see stick', 'cystic']}
 
         # example: hold shield for 4 seconds
         self.modifiers = {'inputs': ['wait', 'hold', 'press', 'hit', ],
-                          'multiplier': ['times'],
-                          'pointer': ['side', 'smash', 'tilt',],
+                          'multiplier': ['times', 'once', 'twice', 'thrice'],
+                          'pointer': ['side', 'smash', 'tilt', 'flick'],
                           'direction': ['up', 'down', 'left', 'right'],
                           'other': ['tap', 'mash', 'half', 'degrees', 'seconds'],
                           'action': ['run', 'go', 'walk'],
@@ -52,9 +55,13 @@ class Controller():
 
         # debug for stopping during tests
         if self.execute:
+            print(self.new_moves)
+
+            #search for phrases first --> replace phrase in moves for transport to new_moves
+            self._replace_phrases(moves)
+
             # look for modifiers first
             for move in self.new_moves:
-
                 try:
                     if move in list(it.chain.from_iterable(self.modifiers.values())):
                         print(move + '!')
@@ -75,6 +82,41 @@ class Controller():
             # [i(direction=self._direction, mod_move=self.mod_move, mod_time=self.mod_time) for i, x in self.available_moves.items() for move in self.new_moves if move in x]
         else:
             print('First pass next')
+
+
+    def _replace_phrases(self, moves):
+        """
+        Takes the moves list and replaces phrases with key pair for move execution
+        :param moves:
+        """
+
+        def _generate_ngrams(moves, n):
+            """Generates list of ngrams from moves with n value"""
+            # Convert to lowercases
+            moves = moves.lower()
+
+            # Replace all none alphanumeric characters with spaces
+            moves = re.sub(r'[^a-zA-Z0-9\s]', ' ', moves)
+
+            # Break sentence in the token, remove empty tokens
+            tokens = [token for token in moves.split(" ") if token != ""]
+
+            # Use the zip function to help us generate n-grams
+            # Concatentate the tokens into ngrams and return
+            ngrams = zip(*[tokens[i:] for i in range(n)])
+            return [" ".join(ngram) for ngram in ngrams]
+
+
+
+        bigram_list = _generate_ngrams(moves, 2)
+
+        for phrase in bigram_list:
+            for mod, mod_list in self.mod_phrases.items():
+                if phrase in mod_list:
+                    print(phrase + '!!')
+
+
+        self.moves = modified_moves
 
 
     def _set_direction(self, direction):
@@ -106,7 +148,7 @@ class Controller():
             Find the number in the phrase and generate a int value. Mod type will search
             for numbers in different spaces.
             """
-            num_to_int = {'one': 1, 'two': 2, 'three': 3,
+            num_to_int = {['one', 'once']: 1, ['two', 'twice']: 2, ['three', 'thrice']: 3,
                           'four': 4, 'five': 5, 'six': 6,
                           'seven': 7, 'eight': 8, 'nine': 9,
                           'ten': 10, 'half': 0.5}
@@ -256,7 +298,7 @@ class Controller():
         ReleaseKey(A)
 
 
-moves = "press stick left for ten seconds then down for three seconds"
+moves = "press stick left for ten seconds then d-pad up twice and flick c stick down"
 moves1 = "run right and press a button three times"
 move = "stick"
 direction = "left" # if not defined will default to last direction called

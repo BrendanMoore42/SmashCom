@@ -9,9 +9,8 @@ Games Supported Currently:
 Super Smash Bros. Melee
 """
 import time
-# from controller import Controller
 # from Mods.Controllers.DirectKeys.directkeys import *
-import Mods.Games.smash_melee
+from Mods.Games.smash_melee import AddOn as ssbm
 
 # Add to button list to modify/add phrases
 buttons = {'a': ['a'],
@@ -36,7 +35,7 @@ buttons = {'a': ['a'],
            }
 
 # Add games
-games = [smash_melee, ]
+games = [ssbm, ]
 
 class GC_Controller():
     def __init__(self, game, moves, execute=True):
