@@ -9,12 +9,12 @@ Can be ported to custom consoles and game-specific packs
 import re
 import time
 import itertools as it
-from DirectKeys.directkeys import *
-from Mods.Controllers.gamecube import GC_Controller
+# from DirectKeys.directkeys import *
+# from Mods.Controllers.gamecube import GC_Controller
 
 
 # Approved mods: add here to add quick links to the controller
-mods = {'gc': {GC_Controller: {'ssbm': 'Super Smash Bros. Melee', }},
+mods = {'gc': {'GC_Controller': {'ssbm': 'Super Smash Bros. Melee', }},
         'nes': {'NES': {'smb': 'Super Mario Bros.'}},
         'pc': {'PC': {'rl': 'Rocket League', }},
         }
@@ -23,7 +23,6 @@ class Controller():
     def __init__(self, moves,):
         self.moves = moves.lower()
         self.new_moves = moves.split(' ')
-        self._int_moves = []
         self._direction = None
         self._modifier = None
         self._mod_move = None
@@ -31,22 +30,21 @@ class Controller():
         self._mod_index = 0
         self.execute = True
 
-
-        # Replace numbers with string to integer values
-        self._replace_numbers()
-
         # Add to button/analog list to modify/add inputs
         self.buttons = {'button': ['a_press', 'b_press', 'x', 'y', 'l1', 'l2', 'r1' 'r2', 'z']}
         self.analog = {'analog': ['stick', 'dpad', 'cstick']}
 
-        # Add macros and custom functions here
-        self.mod_phrases = {'dpad': ['d-pad', 'd pad'],
-                            'cstick': ['c stick', 'c-stick', 'see stick', 'cystic'],
+        # Add custom macro/move sequence/function keys here to list of trigger phrases
+        self.mod_phrases = {'dpad': ['d-pad', 'd pad', ],
+                            'cstick': ['c stick', 'c-stick', 'see stick', 'cystic', ],
                             'a_press': ['a button', ],
                             'b_press': ['b button', 'bee button'],
-                            }
+                            'test_trigram': ['ride the bull', ],
+                            'test_QUADGRAM': ['enter the konami code']}
+        # Make little function that auto finds the longest string in the values
+        self.max_ngram = 4 # max number of words in phrases controller will look for
 
-        # example: hold up for four seconds
+        # Example: hold up for four seconds
         self.modifiers = {'inputs': ['wait', 'hold', 'press', 'hit', ],
                           'multiplier': ['times', 'once', 'twice', 'thrice'],
                           'pointer': ['side', 'smash', 'tilt', 'flick'],
@@ -56,21 +54,25 @@ class Controller():
                           'buttons': self.buttons['button'],
                           'analog': self.analog['analog']}
 
+        # Add number values here that mess up in translation
+        self.num_to_replace = {'1': ['one', 'once', 'half', 'quarter', 'split'], # if half, make 1 and then half as a boolean in function call when hold is called
+                          '2': ['two', 'twice', 'double', ], '3': ['three', 'thrice'],
+                          '4': 'four', '5': 'five', '6': 'six',
+                          '7': 'seven', '8': 'eight', '9': 'nine',
+                          '10': 'ten', '11': 'eleven'}
+
         # add custom functions here with a list of terms
         self.available_moves = {self.button_press: self.buttons['button'],
                                 self.analog_input: self.analog['analog'],
                                 self._set_modifiers: list(it.chain.from_iterable(self.modifiers.values()))}
 
-
+        # Translate incoming moves to respective keys and modifier values
+        self._replace_numbers()  # Replace numbers with string to integer value: ie, 'seven' to '7'
+        self._replace_phrases()  # Replace ngrams with key phrases
 
 
         # debug for stopping during tests
         if self.execute:
-            print(self.new_moves)
-
-            #search for phrases first --> replace phrase in moves for transport to new_moves
-            self._replace_phrases(moves)
-
             # look for modifiers first
             for move in self.new_moves:
                 try:
@@ -98,14 +100,8 @@ class Controller():
     def _replace_numbers(self):
         """Large numbers will typically be ready to convert to int, but numbers 0-10 sometimes
         translate as strings. Any alphanumeric values are converted to int strings."""
-        num_to_replace = {'1': ['one', 'once', 'half', 'quarter', 'split'],
-                          '2': ['two', 'twice', 'double', ], '3': ['three', 'thrice'],
-                          '4': 'four', '5': 'five', '6': 'six',
-                          '7': 'seven', '8': 'eight', '9': 'nine',
-                          '10': 'ten', '11':'eleven'}  # if half, make 1 and then half as a boolean in function call when hold is called
-
         # Find and replace numbers
-        for i, x in num_to_replace.items():
+        for i, x in self.num_to_replace.items():
             for move in self.new_moves:
                 loc = self.new_moves.index(move)
                 if move in x:
@@ -113,43 +109,45 @@ class Controller():
 
         # Join new moves into moves list. Moves lists is still checked for modifiers as a whole string.
         self.moves = ' '.join(move for move in self.new_moves)
-        print(self.moves)
 
 
-    def _replace_phrases(self, moves):
+    def _replace_phrases(self):
         """
         Takes the moves list and replaces phrases with key pair for move execution
         :param moves: list
         """
+        # Hold temp values to append to moves after logic
+        temp_gram = []
 
         def generate_ngrams(moves, n):
             """Generates list of ngrams from moves with n value"""
-            # Convert to lowercases
-            moves = moves.lower()
-
-            # Replace all none alphanumeric characters with spaces
-            moves = re.sub(r'[^a-zA-Z0-9\s]', ' ', moves)
-
             # Break sentence in the token, remove empty tokens
             tokens = [token for token in moves.split(" ") if token != ""]
 
-            # Use the zip function to help us generate n-grams
             # Concatentate the tokens into ngrams and return
             ngrams = zip(*[tokens[i:] for i in range(n)])
             return [" ".join(ngram) for ngram in ngrams]
 
+        # Sweep through moves from max ngram count to 1, updating the moves with every pass, in reverse
+        for i in reversed(range(1, self.max_ngram+1)):
+            gram = generate_ngrams(self.moves, i)
+            print(i, gram)
+            for mod, mod_list in self.mod_phrases.items():
+                for phrase in gram:
+                    loc = gram.index(phrase)
+                    if gram[loc] in mod_list: ## ADD LIST OF EVERYTHING YOU NEED TO ONE LIST HERE IF ITS IN ABOVE DICTS
+                        gram[loc] = mod
+                        temp_gram.append(mod)
+                    else:
+                        ## maybe iterate through numbers dict because those aren't in mod phrases
+                        pass
 
-        bigram_list = generate_ngrams(moves, 2)
-
-        # for index in range(len(bigram_list)):
-        for mod, mod_list in self.mod_phrases.items():
-            for phrase in bigram_list:
-                loc = bigram_list.index(phrase)
-                if bigram_list[loc] in mod_list:
-                    bigram_list[loc] = mod
-
-        print(bigram_list)
-        # self.moves = modified_moves
+            print(temp_gram)
+            if i >= 3:
+                # Apply changes and decrease ngram count
+                self.moves = ' '.join(word.split(' ')[0] for word in gram)
+            else:
+                print('PPMD' + self.moves)
 
 
     def _set_direction(self, direction):
@@ -331,7 +329,7 @@ class Controller():
         ReleaseKey(A)
 
 
-moves = "press stick left for ten seconds then d-pad up twice and flick c stick down"
+moves = "press stick left for ten seconds then d-pad up twice and flick c stick down then press l2 and r1 to ride the bull then enter the konami code"
 moves1 = "run right and press a button three times"
 move = "stick"
 direction = "left" # if not defined will default to last direction called
