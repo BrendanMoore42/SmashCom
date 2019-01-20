@@ -49,7 +49,7 @@ class Controller():
                           'multiplier': ['times', 'once', 'twice', 'thrice'],
                           'pointer': ['side', 'smash', 'tilt', 'flick'],
                           'direction': ['up', 'down', 'left', 'right'],
-                          'other': ['tap', 'mash', 'half', 'degrees', 'seconds', 'wiggle'],
+                          'other': ['tap', 'mash', 'half', 'degrees', 'seconds', 'wiggle', 'combine'],
                           'action': ['run', 'go', 'walk'],
                           'buttons': self.buttons['button'],
                           'analog': self.analog['analog']}
@@ -118,6 +118,7 @@ class Controller():
         """
         # Hold temp values to append to moves after logic
         temp_gram = []
+        gram_out = []
 
         def generate_ngrams(moves, n):
             """Generates list of ngrams from moves with n value"""
@@ -127,6 +128,7 @@ class Controller():
             # Concatentate the tokens into ngrams and return
             ngrams = zip(*[tokens[i:] for i in range(n)])
             return [" ".join(ngram) for ngram in ngrams]
+
 
         # Sweep through moves from max ngram count to 1, updating the moves with every pass, in reverse
         for i in reversed(range(1, self.max_ngram+1)):
@@ -139,6 +141,7 @@ class Controller():
                         gram[loc] = mod
                         temp_gram.append(mod)
                     else:
+                        temp_gram.append(gram[loc].split(' ')[0])
                         ## maybe iterate through numbers dict because those aren't in mod phrases
                         pass
 
