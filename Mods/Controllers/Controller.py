@@ -20,9 +20,10 @@ mods = {'gc': {GC_Controller: {'ssbm': 'Super Smash Bros. Melee', }},
         }
 
 class Controller():
-    def __init__(self, moves):
+    def __init__(self, moves,):
         self.moves = moves.lower()
         self.new_moves = moves.split(' ')
+        self._int_moves = []
         self._direction = None
         self._modifier = None
         self._mod_move = None
@@ -30,20 +31,27 @@ class Controller():
         self._mod_index = 0
         self.execute = True
 
+
+        # Replace numbers with string to integer values
+        self._replace_numbers()
+
         # Add to button/analog list to modify/add inputs
-        self.buttons = {'button': ['a', 'b', 'x', 'y', 'l1', 'l2', 'r1' 'r2', 'z']}
+        self.buttons = {'button': ['a_press', 'b_press', 'x', 'y', 'l1', 'l2', 'r1' 'r2', 'z']}
         self.analog = {'analog': ['stick', 'dpad', 'cstick']}
 
         # Add macros and custom functions here
         self.mod_phrases = {'dpad': ['d-pad', 'd pad'],
-                            'cstick': ['c stick', 'c-stick', 'see stick', 'cystic']}
+                            'cstick': ['c stick', 'c-stick', 'see stick', 'cystic'],
+                            'a_press': ['a button', ],
+                            'b_press': ['b button', 'bee button'],
+                            }
 
-        # example: hold shield for 4 seconds
+        # example: hold up for four seconds
         self.modifiers = {'inputs': ['wait', 'hold', 'press', 'hit', ],
                           'multiplier': ['times', 'once', 'twice', 'thrice'],
                           'pointer': ['side', 'smash', 'tilt', 'flick'],
                           'direction': ['up', 'down', 'left', 'right'],
-                          'other': ['tap', 'mash', 'half', 'degrees', 'seconds'],
+                          'other': ['tap', 'mash', 'half', 'degrees', 'seconds', 'wiggle'],
                           'action': ['run', 'go', 'walk'],
                           'buttons': self.buttons['button'],
                           'analog': self.analog['analog']}
@@ -52,6 +60,9 @@ class Controller():
         self.available_moves = {self.button_press: self.buttons['button'],
                                 self.analog_input: self.analog['analog'],
                                 self._set_modifiers: list(it.chain.from_iterable(self.modifiers.values()))}
+
+
+
 
         # debug for stopping during tests
         if self.execute:
@@ -83,21 +94,33 @@ class Controller():
         else:
             print('First pass next')
 
+    # turn all str int to int
+    def _replace_numbers(self):
+        """Large numbers will typically be ready to convert to int, but numbers 0-10 sometimes
+        translate as strings. Any alphanumeric values are converted to int strings."""
+        num_to_replace = {'1': ['one', 'once', 'half', 'quarter', 'split'],
+                          '2': ['two', 'twice', 'double', ], '3': ['three', 'thrice'],
+                          '4': 'four', '5': 'five', '6': 'six',
+                          '7': 'seven', '8': 'eight', '9': 'nine',
+                          '10': 'ten', '11':'eleven'}  # if half, make 1 and then half as a boolean in function call when hold is called
+
+        # Find and replace numbers
+        for i, x in num_to_replace.items():
+            for move in self.new_moves:
+                loc = self.new_moves.index(move)
+                if move in x:
+                    self.new_moves[loc] = i
+
+        # Join new moves into moves list. Moves lists is still checked for modifiers as a whole string.
+        self.moves = ' '.join(move for move in self.new_moves)
+        print(self.moves)
+
 
     def _replace_phrases(self, moves):
         """
         Takes the moves list and replaces phrases with key pair for move execution
         :param moves: list
         """
-        
-        # turn all str int to int
-        def replace_numbers(moves):
-            """Replace alphanumeric values"""
-            num_to_replace = {'1': ['one', 'once', 'half'], '2': ['two', 'twice'], '3': ['three', 'thrice'],
-                              '4': 'four', '5': 'five', '6': 'six',
-                              '7': 'seven', '8': 'eight', '9': 'nine',
-                              '10': 'ten'} # if half, make 1 and then half as a boolean in function call when hold is called
-
 
         def generate_ngrams(moves, n):
             """Generates list of ngrams from moves with n value"""
@@ -115,17 +138,19 @@ class Controller():
             ngrams = zip(*[tokens[i:] for i in range(n)])
             return [" ".join(ngram) for ngram in ngrams]
 
-
-
         bigram_list = generate_ngrams(moves, 2)
 
-        for phrase in bigram_list:
-            for mod, mod_list in self.mod_phrases.items():
-                if phrase in mod_list:
-                    print(phrase + '!!')
+        for index in range(len(bigram_list)):
+            pass
+
+        for mod, mod_list in self.mod_phrases.items():
+            for phrase in bigram_list:
+                loc = bigram_list.index(phrase)
+                if bigram_list[index] in mod_list:
+                    bigram_list[loc] = mod
 
 
-        self.moves = modified_moves
+        # self.moves = modified_moves
 
 
     def _set_direction(self, direction):
