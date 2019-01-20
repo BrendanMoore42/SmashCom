@@ -9,6 +9,7 @@ Can be ported to custom consoles and game-specific packs
 import re
 import time
 import itertools as it
+from pampy import match, _
 # from DirectKeys.directkeys import *
 # from Mods.Controllers.gamecube import GC_Controller
 
@@ -41,8 +42,6 @@ class Controller():
                             'b_press': ['b button', 'bee button'],
                             'test_trigram': ['ride the bull', ],
                             'test_QUADGRAM': ['enter the konami code']}
-        # Make little function that auto finds the longest string in the values
-        self.max_ngram = 4 # max number of words in phrases controller will look for
 
         # Example: hold up for four seconds
         self.modifiers = {'inputs': ['wait', 'hold', 'press', 'hit', ],
@@ -68,6 +67,7 @@ class Controller():
 
         # Translate incoming moves to respective keys and modifier values
         self._replace_numbers()  # Replace numbers with string to integer value: ie, 'seven' to '7'
+        print('replacing phrases')
         self._replace_phrases()  # Replace ngrams with key phrases
 
 
@@ -116,41 +116,53 @@ class Controller():
         Takes the moves list and replaces phrases with key pair for move execution
         :param moves: list
         """
-        # Hold temp values to append to moves after logic
-        temp_gram = []
-        gram_out = []
 
-        def generate_ngrams(moves, n):
-            """Generates list of ngrams from moves with n value"""
-            # Break sentence in the token, remove empty tokens
-            tokens = [token for token in moves.split(" ") if token != ""]
+        for key, mod in self.mod_phrases.values():
+            match(self.moves, mod, key, default=False)
+        
+        # Create a regular expression  from the dictionary keys
+        regex = re.compile("(%s)" % "|".join(map(re.escape, self.mod_phrases.keys())))
 
-            # Concatentate the tokens into ngrams and return
-            ngrams = zip(*[tokens[i:] for i in range(n)])
-            return [" ".join(ngram) for ngram in ngrams]
+        # For each match, look-up corresponding value in dictionary
+        toast = regex.sub(lambda mo: dict[mo.string[mo.start():mo.end()]], self.moves)
 
+        print(toast, '!')
 
-        # Sweep through moves from max ngram count to 1, updating the moves with every pass, in reverse
-        for i in reversed(range(1, self.max_ngram+1)):
-            gram = generate_ngrams(self.moves, i)
-            print(i, gram)
-            for mod, mod_list in self.mod_phrases.items():
-                for phrase in gram:
-                    loc = gram.index(phrase)
-                    if gram[loc] in mod_list: ## ADD LIST OF EVERYTHING YOU NEED TO ONE LIST HERE IF ITS IN ABOVE DICTS
-                        gram[loc] = mod
-                        temp_gram.append(mod)
-                    else:
-                        temp_gram.append(gram[loc].split(' ')[0])
-                        ## maybe iterate through numbers dict because those aren't in mod phrases
-                        pass
-
-            print(temp_gram)
-            if i >= 3:
-                # Apply changes and decrease ngram count
-                self.moves = ' '.join(word.split(' ')[0] for word in gram)
-            else:
-                print('PPMD' + self.moves)
+        # # Hold temp values to append to moves after logic
+        # temp_gram = []
+        # gram_out = []
+        #
+        # def generate_ngrams(moves, n):
+        #     """Generates list of ngrams from moves with n value"""
+        #     # Break sentence in the token, remove empty tokens
+        #     tokens = [token for token in moves.split(" ") if token != ""]
+        #
+        #     # Concatentate the tokens into ngrams and return
+        #     ngrams = zip(*[tokens[i:] for i in range(n)])
+        #     return [" ".join(ngram) for ngram in ngrams]
+        #
+        #
+        # # Sweep through moves from max ngram count to 1, updating the moves with every pass, in reverse
+        # for i in reversed(range(1, self.max_ngram+1)):
+        #     gram = generate_ngrams(self.moves, i)
+        #     print(i, gram)
+        #     for mod, mod_list in self.mod_phrases.items():
+        #         for phrase in gram:
+        #             loc = gram.index(phrase)
+        #             if gram[loc] in mod_list: ## ADD LIST OF EVERYTHING YOU NEED TO ONE LIST HERE IF ITS IN ABOVE DICTS
+        #                 gram[loc] = mod
+        #                 temp_gram.append(mod)
+        #             else:
+        #                 temp_gram.append(gram[loc].split(' ')[0])
+        #                 ## maybe iterate through numbers dict because those aren't in mod phrases
+        #                 pass
+        #
+        #     print(temp_gram)
+        #     if i >= 3:
+        #         # Apply changes and decrease ngram count
+        #         self.moves = ' '.join(word.split(' ')[0] for word in gram)
+        #     else:
+        #         print('PPMD' + self.moves)
 
 
     def _set_direction(self, direction):
