@@ -138,18 +138,17 @@ class Controller():
             ngrams = zip(*[tokens[i:] for i in range(n)])
             return [" ".join(ngram) for ngram in ngrams]
 
+
         bigram_list = generate_ngrams(moves, 2)
 
-        for index in range(len(bigram_list)):
-            pass
-
+        # for index in range(len(bigram_list)):
         for mod, mod_list in self.mod_phrases.items():
             for phrase in bigram_list:
                 loc = bigram_list.index(phrase)
-                if bigram_list[index] in mod_list:
+                if bigram_list[loc] in mod_list:
                     bigram_list[loc] = mod
 
-
+        print(bigram_list)
         # self.moves = modified_moves
 
 
