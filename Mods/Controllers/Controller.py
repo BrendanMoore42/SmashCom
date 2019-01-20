@@ -40,41 +40,43 @@ class Controller():
                             'cstick': ['c stick', 'c-stick', 'see stick', 'cystic', ],
                             'a_press': ['a button', ],
                             'b_press': ['b button', 'bee button'],
+                            'y': ['why button'],
                             'test_trigram': ['ride the bull', ],
                             'test_QUADGRAM': ['enter the konami code']}
+
+        # Add number values here that mess up in translation
+        self.num_to_replace = {'1': ['one', 'once', 'half', 'quarter', 'split'], # if half, make 1 and then half as a boolean in function call when hold is called
+                               '2': ['two', 'twice', 'double', ], '3': ['three', 'thrice'],
+                               '4': 'four', '5': 'five', '6': 'six',
+                               '7': 'seven', '8': 'eight', '9': 'nine',
+                               '10': 'ten', '11': 'eleven'}
+
+        # Translate incoming moves to respective keys and modifier values
+        self._replace_numbers()  # Replace numbers with string to integer value: ie, 'seven' to '7'
+        self._replace_phrases()  # Replace mod phrases in self.moves with key phrases
 
         # Example: hold up for four seconds
         self.modifiers = {'inputs': ['wait', 'hold', 'press', 'hit', ],
                           'multiplier': ['times', 'once', 'twice', 'thrice'],
                           'pointer': ['side', 'smash', 'tilt', 'flick'],
                           'direction': ['up', 'down', 'left', 'right'],
-                          'other': ['tap', 'mash', 'half', 'degrees', 'seconds', 'wiggle', 'combine'],
+                          'other': ['tap', 'mash', 'half', 'degrees',
+                                    'seconds', 'wiggle', 'combine'],
                           'action': ['run', 'go', 'walk'],
                           'buttons': self.buttons['button'],
                           'analog': self.analog['analog']}
-
-        # Add number values here that mess up in translation
-        self.num_to_replace = {'1': ['one', 'once', 'half', 'quarter', 'split'], # if half, make 1 and then half as a boolean in function call when hold is called
-                          '2': ['two', 'twice', 'double', ], '3': ['three', 'thrice'],
-                          '4': 'four', '5': 'five', '6': 'six',
-                          '7': 'seven', '8': 'eight', '9': 'nine',
-                          '10': 'ten', '11': 'eleven'}
 
         # add custom functions here with a list of terms
         self.available_moves = {self.button_press: self.buttons['button'],
                                 self.analog_input: self.analog['analog'],
                                 self._set_modifiers: list(it.chain.from_iterable(self.modifiers.values()))}
 
-        # Translate incoming moves to respective keys and modifier values
-        self._replace_numbers()  # Replace numbers with string to integer value: ie, 'seven' to '7'
-        print('replacing phrases')
-        self._replace_phrases()  # Replace ngrams with key phrases
-
 
         # debug for stopping during tests
         if self.execute:
             # look for modifiers first
             for move in self.new_moves:
+
                 try:
                     if move in list(it.chain.from_iterable(self.modifiers.values())):
                         print(move + '!')
@@ -113,56 +115,14 @@ class Controller():
 
     def _replace_phrases(self):
         """
-        Takes the moves list and replaces phrases with key pair for move execution
-        :param moves: list
+        Takes the moves list and replaces phrases with key pair for move execution. Works on any length.
         """
 
-        for key, mod in self.mod_phrases.values():
-            match(self.moves, mod, key, default=False)
-        
-        # Create a regular expression  from the dictionary keys
-        regex = re.compile("(%s)" % "|".join(map(re.escape, self.mod_phrases.keys())))
-
-        # For each match, look-up corresponding value in dictionary
-        toast = regex.sub(lambda mo: dict[mo.string[mo.start():mo.end()]], self.moves)
-
-        print(toast, '!')
-
-        # # Hold temp values to append to moves after logic
-        # temp_gram = []
-        # gram_out = []
-        #
-        # def generate_ngrams(moves, n):
-        #     """Generates list of ngrams from moves with n value"""
-        #     # Break sentence in the token, remove empty tokens
-        #     tokens = [token for token in moves.split(" ") if token != ""]
-        #
-        #     # Concatentate the tokens into ngrams and return
-        #     ngrams = zip(*[tokens[i:] for i in range(n)])
-        #     return [" ".join(ngram) for ngram in ngrams]
-        #
-        #
-        # # Sweep through moves from max ngram count to 1, updating the moves with every pass, in reverse
-        # for i in reversed(range(1, self.max_ngram+1)):
-        #     gram = generate_ngrams(self.moves, i)
-        #     print(i, gram)
-        #     for mod, mod_list in self.mod_phrases.items():
-        #         for phrase in gram:
-        #             loc = gram.index(phrase)
-        #             if gram[loc] in mod_list: ## ADD LIST OF EVERYTHING YOU NEED TO ONE LIST HERE IF ITS IN ABOVE DICTS
-        #                 gram[loc] = mod
-        #                 temp_gram.append(mod)
-        #             else:
-        #                 temp_gram.append(gram[loc].split(' ')[0])
-        #                 ## maybe iterate through numbers dict because those aren't in mod phrases
-        #                 pass
-        #
-        #     print(temp_gram)
-        #     if i >= 3:
-        #         # Apply changes and decrease ngram count
-        #         self.moves = ' '.join(word.split(' ')[0] for word in gram)
-        #     else:
-        #         print('PPMD' + self.moves)
+        for key, value in self.mod_phrases.items():
+            pattern = re.compile("(%s)" % "|".join(map(re.escape, value)))
+            self.moves = re.sub(pattern, key, self.moves)
+        self.new_moves = self.moves.split(' ')
+        print(self.new_moves)
 
 
     def _set_direction(self, direction):
@@ -194,11 +154,6 @@ class Controller():
             Find the number in the phrase and generate a int value. Mod type will search
             for numbers in different spaces.
             """
-            num_to_int = {['one', 'once']: 1, ['two', 'twice']: 2, ['three', 'thrice']: 3,
-                          'four': 4, 'five': 5, 'six': 6,
-                          'seven': 7, 'eight': 8, 'nine': 9,
-                          'ten': 10, 'half': 0.5}
-
             if mod_type == 'inputs':
                 try:
                     # returns int value from text
