@@ -42,6 +42,8 @@ class Controller():
                             'a_press': ['a button', ],
                             'b_press': ['b button', 'bee button'],
                             'y': ['why button'],
+                            'l1': ['l trigger'],
+                            'r1': ['r trigger'],
                             'action_split': ['then', 'than', 'and then', 'and than'],
                             'test_trigram': ['ride the bull', ],
                             'test_QUADGRAM': ['enter the konami code']}
@@ -319,7 +321,7 @@ class Controller():
         ReleaseKey(A)
 
 
-moves = "press stick left for ten seconds then d-pad up twice then hold b button for six seconds and then flick c stick down then ride the bull then enter the konami code"
+moves = "press stick left for ten seconds then d-pad up twice then hold b button for six seconds and then then stick right 45 degrees then like flick c stick down then ride the bull then enter the konami code"
 moves1 = "run right and press a button three times"
 move = "stick"
 direction = "left" # if not defined will default to last direction called
