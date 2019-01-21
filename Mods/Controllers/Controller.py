@@ -24,6 +24,7 @@ class Controller():
     def __init__(self, moves,):
         self.moves = moves.lower()
         self.new_moves = moves.split(' ')
+        self._move = None
         self._direction = None
         self._modifier = None
         self._mod_move = None
@@ -41,11 +42,12 @@ class Controller():
                             'a_press': ['a button', ],
                             'b_press': ['b button', 'bee button'],
                             'y': ['why button'],
+                            'action_split': ['then', 'than', 'and then', 'and than'],
                             'test_trigram': ['ride the bull', ],
                             'test_QUADGRAM': ['enter the konami code']}
 
         # Add number values here that mess up in translation
-        self.num_to_replace = {'1': ['one', 'once', 'half', 'quarter', 'split'], # if half, make 1 and then half as a boolean in function call when hold is called
+        self.num_to_replace = {'1': ['one', 'once',],# 'half', 'quarter'],
                                '2': ['two', 'twice', 'double', ], '3': ['three', 'thrice'],
                                '4': 'four', '5': 'five', '6': 'six',
                                '7': 'seven', '8': 'eight', '9': 'nine',
@@ -57,30 +59,37 @@ class Controller():
 
         # Example: hold up for four seconds
         self.modifiers = {'inputs': ['wait', 'hold', 'press', 'hit', ],
-                          'multiplier': ['times', 'once', 'twice', 'thrice'],
+                          'multiplier': ['times', 'once', 'twice', 'thrice', 'half', 'quarter'], # if half, make 1 and then half as a boolean in function call when hold is called
                           'pointer': ['side', 'smash', 'tilt', 'flick'],
                           'direction': ['up', 'down', 'left', 'right'],
                           'other': ['tap', 'mash', 'half', 'degrees',
                                     'seconds', 'wiggle', 'combine'],
                           'action': ['run', 'go', 'walk'],
                           'buttons': self.buttons['button'],
-                          'analog': self.analog['analog']}
+                          'analog': self.analog['analog'],}
 
         # add custom functions here with a list of terms
         self.available_moves = {self.button_press: self.buttons['button'],
                                 self.analog_input: self.analog['analog'],
-                                self._set_modifiers: list(it.chain.from_iterable(self.modifiers.values()))}
-
+                                'modifiers': list(it.chain.from_iterable(self.modifiers.values()))}
 
         # debug for stopping during tests
         if self.execute:
-            # look for modifiers first
-            for move in self.new_moves:
+            # Split moves on the actionable split phrases
+            for move in self.moves.split('action_split'):
+                self._execute_moves(move.lstrip())
 
-                try:
-                    if move in list(it.chain.from_iterable(self.modifiers.values())):
-                        print(move + '!')
-                        self._set_modifiers(move=move)
+
+        # # debug for stopping during tests
+        # if self.execute:
+        #     # look for modifiers first
+        #     for move in self.new_moves:
+        #
+        #
+        #         try:
+        #             if move in list(it.chain.from_iterable(self.modifiers.values())):
+        #                 print(move + '!')
+        #                 self._set_modifiers(move=move)
 
                     # for action, button in self.available_moves.items():
                     #     # move will execute the function, or branch further if modifier present
@@ -90,8 +99,8 @@ class Controller():
                             # if self._modifier:
                             #     self._execute_moves(move=self.moves, direction=self._direction, mod_move=self.mod_move, mod_time=self.mod_time)
                 # iterate through each move and look for match in controller/modifier dictionaries
-                except:
-                    print('not a modifier')
+                # except:
+                #     print('not a modifier')
             #execute move
             #awesome one liner that won't work --> speech modifiers in the way
             # [i(direction=self._direction, mod_move=self.mod_move, mod_time=self.mod_time) for i, x in self.available_moves.items() for move in self.new_moves if move in x]
@@ -136,7 +145,7 @@ class Controller():
         self._mod_value = 0
 
 
-    def _set_modifiers(self, move):
+    def _set_modifiers(self, moves, verbose=False):
         """
         Assign values for modified moves and directions.
         If no mods returns None for variables
@@ -145,47 +154,58 @@ class Controller():
         :return:
         """
 
-        # set modifier for parsing
-        self._modifier = move
+        def convert_to_int(action):
+            """Converts string values to integers and adds it to the self.mod_value"""
+            try:
+                if int(action):
+                    self._mod_value = int(action)
+            except:
+                pass
 
-        # get specified number
-        def _fetch_values(mod_type):
-            """
-            Find the number in the phrase and generate a int value. Mod type will search
-            for numbers in different spaces.
-            """
-            if mod_type == 'inputs':
-                try:
-                    # returns int value from text
-                    word_index = self.moves.index(self._modifier)
-                    # get value for modifier to check where number should be
-                    mod_value = [i for i, x in self.modifiers.items() if move in x]
-                    # search through the incoming moves to find number to convert
-                    modifier_index = self.moves[word_index + mod_value]
-                    # return the value to modify move
-                    modifier_out = num_to_int[modifier_index]
-                except:
-                    print('nope')
-
-        try:
-            if self._modifier in self.modifiers['inputs']:
-                _fetch_values('input')
-                pass
-            if self._modifier in self.modifiers['pointer']:
-                pass
-            if self._modifier in self.modifiers['direction']:
-                pass
-            if self._modifier in self.modifiers['other']:
-                pass
-            if self._modifier in self.modifiers['action']:
-                pass
-        except:
-            self._clear_modifiers()
+        for mod, mods in self.available_moves.items():
+            # clear mod_value for each pass
+            self._mod_value = 0
+            for action in moves.split(' '):
+                convert_to_int(action)
+                if action in mods:
+                    try:
+                        print(action)
+                        if action in self.modifiers['buttons']:
+                            self._move = action
+                        if action in self.modifiers['analog']:
+                            self._move = action
+                        if action in self.modifiers['inputs']:
+                            self._mod_move = action
+                        if action in self.modifiers['pointer']:
+                            pass
+                        if action in self.modifiers['direction']:
+                            self._direction = action
+                        if action in self.modifiers['other']:
+                            if action == 'seconds':
+                                self._modifier = action
+                        if action in self.modifiers['action']:
+                            pass
+                    except:
+                        self._clear_modifiers()
 
 
 
-    def _execute_moves(self, move):
-        pass
+        if verbose:
+            print(f'\nMove: {self._move}',
+                  f'Direction: {self._direction}',
+                  f'Modifier: {self._modifier}',
+                  f'Mod Move: {self._mod_move}',
+                  f'Mod Value: {self._mod_value}',
+                  )
+
+
+    def _execute_moves(self, moves):
+        """Set modifiers and moves and times"""
+        print('Phrase: ' + moves + '\n')
+
+        # Set move modifiers
+        self._set_modifiers(moves, verbose=True)
+
         # [i(move, direction) for i, x in self.available_moves.items() if move in x]
 
 
@@ -299,7 +319,7 @@ class Controller():
         ReleaseKey(A)
 
 
-moves = "press stick left for ten seconds then d-pad up twice and flick c stick down then press l2 and r1 to ride the bull then enter the konami code"
+moves = "press stick left for ten seconds then d-pad up twice then hold b button for six seconds and then flick c stick down then ride the bull then enter the konami code"
 moves1 = "run right and press a button three times"
 move = "stick"
 direction = "left" # if not defined will default to last direction called
