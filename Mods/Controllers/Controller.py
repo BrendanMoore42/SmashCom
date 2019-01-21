@@ -9,8 +9,7 @@ Can be ported to custom consoles and game-specific packs
 import re
 import time
 import itertools as it
-from pampy import match, _
-# from DirectKeys.directkeys import *
+from DirectKeys.directkeys import *
 # from Mods.Controllers.gamecube import GC_Controller
 
 
@@ -75,11 +74,17 @@ class Controller():
                                 self.analog_input: self.analog['analog'],
                                 'modifiers': list(it.chain.from_iterable(self.modifiers.values()))}
 
+        # Link button presses to KEY inputs
+        self._direct_buttons = {'a_press': A,'b_press': B, 'x': X,'y': Y, 'l1': L1, 'l2': L2, 'r1': R1 , 'r2': R2,
+                                'start': START,}
+        self._direct_analog = {'up': UP}
+
         # debug for stopping during tests
         if self.execute:
             # Split moves on the actionable split phrases
             for move in self.moves.split('action_split'):
                 self._execute_moves(move.lstrip())
+
 
 
         # # debug for stopping during tests
@@ -176,6 +181,8 @@ class Controller():
                             self._move = action
                         if action in self.modifiers['analog']:
                             self._move = action
+                        if action in self.modifiers['multiplier']:
+                            self._mod_move = action
                         if action in self.modifiers['inputs']:
                             self._mod_move = action
                         if action in self.modifiers['pointer']:
@@ -208,14 +215,31 @@ class Controller():
         # Set move modifiers
         self._set_modifiers(moves, verbose=True)
 
-        # [i(move, direction) for i, x in self.available_moves.items() if move in x]
+        # Execute moves
+        try:
+            [i() for i, x in self.available_moves.items() if self._move in x]
+        except:
+            pass
 
 
-    def button_press(self, button, ):
-        pass
+
+    def button_press(self):
+        """Takes cleaned input phrase and performs button presses"""
+
+        self._move = self._direct_buttons[self._move]
+
+        if not self._mod_value:
+            self._mod_value = 0.25 # standard button press
+
+
+
+        PressKey(self._move)
+        time.sleep(self._mod_value)
+        ReleaseKey(self._move)
 
 
     def analog_input(self):
+        print('Analog JAM :0')
         pass
 
 

@@ -32,7 +32,7 @@ DLEFT = 0x24
 DRIGHT = 0x26
 
 """
-Gamecube keys as follows;
+Gamecube keys:
 Inputs: A = A, B = B, X = X, Y = Y, Z = Z, START = N
 Control Stick: LEFT = F, UP = T, RIGHT = H, DOWN = G
 C-Stick: LEFT = J, UP = I, RIGHT = L, DOWN = K
