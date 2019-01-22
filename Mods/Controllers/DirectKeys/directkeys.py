@@ -87,4 +87,15 @@ def ReleaseKey(hexKeyCode):
     ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
 
 if __name__ == '__main__':
-    pass
+
+    def press_key(moves, ):
+        # Press Direction
+        PressKey(self._direction)
+        PressKey(self._move)
+
+        # Apply modifier value or default to regular
+        time.sleep(self._mod_value)
+
+        # Release Keys
+        ReleaseKey(self._direction)
+        ReleaseKey(self._move)

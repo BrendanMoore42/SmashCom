@@ -21,15 +21,15 @@ mods = {'gc': {'GC_Controller': {'ssbm': 'Super Smash Bros. Melee', }},
 
 class Controller():
     def __init__(self, moves,):
-        self.moves = moves.lower()
-        self.new_moves = moves.split(' ')
-        self._move = None
-        self._direction = None
-        self._modifier = None
-        self._mod_move = None
-        self._mod_value = 0
-        self._mod_index = 0
-        self.execute = True
+        self.moves = moves.lower() # incoming moveset
+        self.new_moves = moves.split(' ') # moves split into list
+        self._move = None # primary action to be executed
+        self._secondary_move = None # secondary action for combinations
+        self._direction = 'Centre' # direction modifier, defaults to last called, else stick is centred
+        self._modifier = None # special action that changes the execution of primary move
+        self._mod_move = None # extra move if required
+        self._mod_value = 0 # can represent number operations for seconds or multiple inputs required
+        self.execute = True # debug for testing
 
         # Add to button/analog list to modify/add inputs
         self.buttons = {'button': ['a_press', 'b_press', 'x', 'y', 'l1', 'l2', 'r1' 'r2', 'z']}
@@ -62,7 +62,7 @@ class Controller():
         self.modifiers = {'inputs': ['wait', 'hold', 'press', 'hit', ],
                           'multiplier': ['times', 'once', 'twice', 'thrice', 'half', 'quarter'], # if half, make 1 and then half as a boolean in function call when hold is called
                           'pointer': ['side', 'smash', 'tilt', 'flick'],
-                          'direction': ['up', 'down', 'left', 'right'],
+                          'direction': ['up', 'down', 'left', 'right', 'centre', 'center'],
                           'other': ['tap', 'mash', 'half', 'degrees',
                                     'seconds', 'wiggle', 'combine'],
                           'action': ['run', 'go', 'walk'],
@@ -79,7 +79,7 @@ class Controller():
                                 'start': START,}
         self._direct_analog = {'up': UP}
 
-        # debug for stopping during tests
+        # Execute moves
         if self.execute:
             # Split moves on the actionable split phrases
             for move in self.moves.split('action_split'):
@@ -147,6 +147,7 @@ class Controller():
 
     def _clear_modifiers(self):
         """Reset modifiers if none present"""
+        self._direction = 'Centre'
         self._modifier = None
         self._mod_move = None
         self._mod_value = 0
@@ -171,7 +172,7 @@ class Controller():
 
         for mod, mods in self.available_moves.items():
             # clear mod_value for each pass
-            self._mod_value = 0
+            self._clear_modifiers()
             for action in moves.split(' '):
                 convert_to_int(action)
                 if action in mods:
@@ -215,7 +216,7 @@ class Controller():
         # Set move modifiers
         self._set_modifiers(moves, verbose=True)
 
-        # Execute moves
+        # Execute moves, that type error? we can ignore that
         try:
             [i() for i, x in self.available_moves.items() if self._move in x]
         except:
@@ -228,14 +229,23 @@ class Controller():
 
         self._move = self._direct_buttons[self._move]
 
+        def press_key(moves, ):
+
+            #Press Direction
+            PressKey(self._direction)
+            PressKey(self._move)
+
+            # Apply modifier value or default to regular
+            time.sleep(self._mod_value)
+            #Release Keys
+            ReleaseKey(self._direction)
+            ReleaseKey(self._move)
+
         if not self._mod_value:
             self._mod_value = 0.25 # standard button press
 
-
-
-        PressKey(self._move)
-        time.sleep(self._mod_value)
-        ReleaseKey(self._move)
+        if self._mod_move == 'wait':
+            press_key()
 
 
     def analog_input(self):
