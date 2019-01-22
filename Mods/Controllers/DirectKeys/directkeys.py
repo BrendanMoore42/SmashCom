@@ -88,14 +88,15 @@ def ReleaseKey(hexKeyCode):
 
 if __name__ == '__main__':
 
-    def press_key(moves, ):
+    def press_key(ab):
         # Press Direction
-        PressKey(self._direction)
-        PressKey(self._move)
+        PressKey(A)
+        PressKey(B)
 
         # Apply modifier value or default to regular
-        time.sleep(self._mod_value)
+        time.sleep(3)
 
         # Release Keys
-        ReleaseKey(self._direction)
-        ReleaseKey(self._move)
+        ReleaseKey(A)
+        ReleaseKey(B)
+    press_key()

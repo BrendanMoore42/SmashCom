@@ -9,7 +9,7 @@ Can be ported to custom consoles and game-specific packs
 import re
 import time
 import itertools as it
-from DirectKeys.directkeys import *
+from pyautogui import press, keyDown, keyUp, typewrite, hotkey
 # from Mods.Controllers.gamecube import GC_Controller
 
 
@@ -73,11 +73,6 @@ class Controller():
         self.available_moves = {self.button_press: self.buttons['button'],
                                 self.analog_input: self.analog['analog'],
                                 'modifiers': list(it.chain.from_iterable(self.modifiers.values()))}
-
-        # Link button presses to KEY inputs
-        self._direct_buttons = {'a_press': A,'b_press': B, 'x': X,'y': Y, 'l1': L1, 'l2': L2, 'r1': R1 , 'r2': R2,
-                                'start': START,}
-        self._direct_analog = {'up': UP}
 
         # Execute moves
         if self.execute:
@@ -363,4 +358,6 @@ modifier = "press"
 mod_move = "shield"
 mod_time = 10
 
-player = Controller(moves=moves)
+#player = Controller(moves=moves)
+
+press('d', pause=20)
