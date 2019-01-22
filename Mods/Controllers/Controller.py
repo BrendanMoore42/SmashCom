@@ -74,6 +74,9 @@ class Controller():
                                 self.analog_input: self.analog['analog'],
                                 'modifiers': list(it.chain.from_iterable(self.modifiers.values()))}
 
+        self._direct_buttons = {'a_press': 'a',
+                                'b_press': 'b'}
+
         # Execute moves
         if self.execute:
             # Split moves on the actionable split phrases
@@ -213,6 +216,7 @@ class Controller():
 
         # Execute moves, that type error? we can ignore that
         try:
+            # print(self._move)
             [i() for i, x in self.available_moves.items() if self._move in x]
         except:
             pass
@@ -221,20 +225,17 @@ class Controller():
 
     def button_press(self):
         """Takes cleaned input phrase and performs button presses"""
-
+        print(f'OMG BUTTONS {self._move}')
         self._move = self._direct_buttons[self._move]
+        print(f'sending move: {self._move}')
 
-        def press_key(moves, ):
+        def press_key():
+            if self._mod_move == 'hold':
 
-            #Press Direction
-            PressKey(self._direction)
-            PressKey(self._move)
+                hotkey(self._move)
 
-            # Apply modifier value or default to regular
-            time.sleep(self._mod_value)
-            #Release Keys
-            ReleaseKey(self._direction)
-            ReleaseKey(self._move)
+
+        press_key()
 
         if not self._mod_value:
             self._mod_value = 0.25 # standard button press
@@ -358,6 +359,6 @@ modifier = "press"
 mod_move = "shield"
 mod_time = 10
 
-#player = Controller(moves=moves)
+player = Controller(moves=moves)
 
-press('d', pause=20)
+# press('d', pause=20)
