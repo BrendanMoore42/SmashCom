@@ -94,7 +94,7 @@ def main(args):
     #debug_init = SmashCom(controller=controller, game=game)
 
 if __name__ == '__main__':
-    temp_args = ['smashcom.py', 'ssbm']
-    main(temp_args)
-    # sc = SmashCom()
-    # sc.lets_go()
+    # temp_args = ['smashcom.py', 'ssbm']
+    # main(temp_args)
+    sc = SmashCom()
+    sc.lets_go()

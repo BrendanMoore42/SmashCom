@@ -8,7 +8,10 @@ Can be ported to custom consoles and game-specific packs
 """
 import re
 import time
+from time import sleep
 import itertools as it
+from threading import Timer
+# import multiprocessing as mp
 from pyautogui import press, keyDown, keyUp, typewrite, hotkey
 # from Mods.Controllers.gamecube import GC_Controller
 
@@ -163,8 +166,8 @@ class Controller():
         def convert_to_int(action):
             """Converts string values to integers and adds it to the self.mod_value"""
             try:
-                if int(action):
-                    self._mod_value = int(action)
+                if float(action):
+                    self._mod_value = float(action)
             except:
                 pass
 
@@ -231,17 +234,43 @@ class Controller():
 
         def press_key():
             if self._mod_move == 'hold':
+                print(self._mod_value)
+                def hold_press(button):
+                    press(button)
 
-                hotkey(self._move)
+                timer = RepeatedTimer(0.01, hold_press, self._move)
+                try:
+                    sleep(2)
+                finally:
+                    timer.stop()
 
-
-        press_key()
 
         if not self._mod_value:
-            self._mod_value = 0.25 # standard button press
+            self._mod_value = 0.25  # standard button press
 
-        if self._mod_move == 'wait':
+        if self._mod_move == 'hold':
+            # Start multiprocess to time key input
+            # process = mp.Process(target=press())
+
             press_key()
+
+            #
+            # print(f'{self._mod_value}, {self._move}')
+            # hold_value = self._mod_value
+            # self_hold = 0
+            # moves = self._move * int(self._mod_value)
+            # print(moves)
+
+
+            print(f'Hey baby just pressed that button for {self._mod_value} seconds bruh')
+
+
+
+
+
+
+
+
 
 
     def analog_input(self):
@@ -350,6 +379,31 @@ class Controller():
         ReleaseKey(RIGHT)
         ReleaseKey(A)
 
+
+class RepeatedTimer(object):
+    def __init__(self, interval, function, *args, **kwargs):
+        self._timer     = None
+        self.interval   = interval
+        self.function   = function
+        self.args       = args
+        self.kwargs     = kwargs
+        self.is_running = False
+        self.start()
+
+    def _run(self):
+        self.is_running = False
+        self.start()
+        self.function(*self.args, **self.kwargs)
+
+    def start(self):
+        if not self.is_running:
+            self._timer = Timer(self.interval, self._run)
+            self._timer.start()
+            self.is_running = True
+
+    def stop(self):
+        self._timer.cancel()
+        self.is_running = False
 
 moves = "press stick left for ten seconds then d-pad up twice then hold b button for six seconds and then then stick right 45 degrees then like flick c stick down then ride the bull then enter the konami code"
 moves1 = "run right and press a button three times"
