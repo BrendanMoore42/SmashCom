@@ -66,8 +66,8 @@ class Controller():
                           'multiplier': ['times', 'once', 'twice', 'thrice', 'half', 'quarter'], # if half, make 1 and then half as a boolean in function call when hold is called
                           'pointer': ['side', 'smash', 'tilt', 'flick'],
                           'direction': ['up', 'down', 'left', 'right', 'centre', 'center'],
-                          'other': ['tap', 'mash', 'half', 'degrees',
-                                    'seconds', 'wiggle', 'combine'],
+                          'other': ['tap', 'mash', 'half', 'combine',
+                                    'seconds', 'second', 'wiggle', ],
                           'action': ['run', 'go', 'walk'],
                           'buttons': self.buttons['button'],
                           'analog': self.analog['analog'],}
@@ -228,53 +228,68 @@ class Controller():
 
     def button_press(self):
         """Takes cleaned input phrase and performs button presses"""
-        print(f'OMG BUTTONS {self._move}')
+        print(f'Button to press: {self._move}')
         self._move = self._direct_buttons[self._move]
-        print(f'sending move: {self._move}')
 
         def press_key():
+
+            if self._mod_move == 'press':
+                pass
+
             if self._mod_move == 'hold':
-                print(self._mod_value)
+
                 def hold_press(button):
                     press(button)
 
+                # for debug/measuring fn accuracy
+                start = time.time()
+
                 timer = RepeatedTimer(0.01, hold_press, self._move)
                 try:
-                    sleep(2)
+                    sleep(self._mod_value)
                 finally:
                     timer.stop()
 
+                    # for debug/measuring fn accuracy
+                    end = time.time()
+                # for debug / measuring fn accuracy
+                print(f'total time wasted: {end-start}')
+
+            if self._mod_move == 'wait':
+                time.sleep(self._mod_value)
 
         if not self._mod_value:
             self._mod_value = 0.25  # standard button press
 
-        if self._mod_move == 'hold':
-            # Start multiprocess to time key input
-            # process = mp.Process(target=press())
-
-            press_key()
-
-            #
-            # print(f'{self._mod_value}, {self._move}')
-            # hold_value = self._mod_value
-            # self_hold = 0
-            # moves = self._move * int(self._mod_value)
-            # print(moves)
-
-
-            print(f'Hey baby just pressed that button for {self._mod_value} seconds bruh')
-
-
-
-
-
-
-
-
+        press_key()
 
 
     def analog_input(self):
         print('Analog JAM :0')
+
+        if self._mod_move == 'press':
+
+            pass
+
+        if self._mod_move == 'hold':
+
+            def hold_press(button):
+                press(button)
+
+            # for debug/measuring fn accuracy
+            start = time.time()
+
+            timer = RepeatedTimer(0.01, hold_press, self._move)
+            try:
+                sleep(self._mod_value)
+            finally:
+                timer.stop()
+
+                # for debug/measuring fn accuracy
+                end = time.time()
+            # for debug / measuring fn accuracy
+            print(f'total time wasted: {end - start}')
+
         pass
 
 
@@ -405,7 +420,7 @@ class RepeatedTimer(object):
         self._timer.cancel()
         self.is_running = False
 
-moves = "press stick left for ten seconds then d-pad up twice then hold b button for six seconds and then then stick right 45 degrees then like flick c stick down then ride the bull then enter the konami code"
+moves = "press stick left for four seconds then d-pad up twice then hold b button for six seconds and then then stick up right then like flick c stick down then ride the bull then enter the konami code"
 moves1 = "run right and press a button three times"
 move = "stick"
 direction = "left" # if not defined will default to last direction called
