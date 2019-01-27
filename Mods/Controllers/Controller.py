@@ -12,7 +12,11 @@ from time import sleep
 import itertools as it
 from threading import Timer
 # import multiprocessing as mp
+
+#need to figure out this input problem
+from pynput.keyboard import Key, Controller
 from pyautogui import press, keyDown, keyUp, typewrite, hotkey
+from DirectKeys.directkeys import *
 # from Mods.Controllers.gamecube import GC_Controller
 
 
@@ -22,7 +26,7 @@ mods = {'gc': {'GC_Controller': {'ssbm': 'Super Smash Bros. Melee', }},
         'pc': {'PC': {'rl': 'Rocket League', }},
         }
 
-class Controller():
+class MyController():
     def __init__(self, moves,):
         self.moves = moves.lower() # incoming moveset
         self.new_moves = moves.split(' ') # moves split into list
@@ -31,7 +35,7 @@ class Controller():
         self._direction = 'Centre' # direction modifier, defaults to last called, else stick is centred
         self._modifier = None # special action that changes the execution of primary move
         self._mod_move = None # extra move if required
-        self._mod_value = 0 # can represent number operations for seconds or multiple inputs required
+        self._mod_value = 0 # can represent number operations for seconds or multiple inputs as required
         self.execute = True # debug for testing
 
         # Add to button/analog list to modify/add inputs
@@ -236,16 +240,17 @@ class Controller():
 
         def press_key():
 
+            if self._mod_move == 'times':
+                buttons = self._move * int(self._mod_value)
+                print('sending inputs')
 
-            if self._mod_move == 'press':
-                pass
 
             if self._mod_move == 'hold':
 
                 def hold_press(button):
-                    keyDown(self._direction)
+                    # keyDown(self._direction)
                     press(button)
-                    keyUp(self._direction)
+                    # keyUp(self._direction)
 
                 # for debug/measuring fn accuracy
                 start = time.time()
@@ -427,13 +432,15 @@ class RepeatedTimer(object):
         self.is_running = False
 
 moves = "press stick left for four seconds then d-pad up twice then hold b button for six seconds and then then stick up right then like flick c stick down then ride the bull then enter the konami code"
-moves1 = "run right and press a button three times"
+moves1 = "press b button 2 times"
 move = "stick"
 direction = "left" # if not defined will default to last direction called
 modifier = "press"
 mod_move = "shield"
 mod_time = 10
 
-player = Controller(moves=moves)
+time.sleep(2)
+player = MyController(moves=moves1)
 
 # press('d', pause=20)
+
