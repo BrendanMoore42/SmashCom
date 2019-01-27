@@ -231,7 +231,11 @@ class Controller():
         print(f'Button to press: {self._move}')
         self._move = self._direct_buttons[self._move]
 
+        # def analog_input():
+        #     pass
+
         def press_key():
+
 
             if self._mod_move == 'press':
                 pass
@@ -239,7 +243,9 @@ class Controller():
             if self._mod_move == 'hold':
 
                 def hold_press(button):
+                    keyDown(self._direction)
                     press(button)
+                    keyUp(self._direction)
 
                 # for debug/measuring fn accuracy
                 start = time.time()
@@ -265,30 +271,30 @@ class Controller():
 
 
     def analog_input(self):
-        print('Analog JAM :0')
-
-        if self._mod_move == 'press':
-
-            pass
-
-        if self._mod_move == 'hold':
-
-            def hold_press(button):
-                press(button)
-
-            # for debug/measuring fn accuracy
-            start = time.time()
-
-            timer = RepeatedTimer(0.01, hold_press, self._move)
-            try:
-                sleep(self._mod_value)
-            finally:
-                timer.stop()
-
-                # for debug/measuring fn accuracy
-                end = time.time()
-            # for debug / measuring fn accuracy
-            print(f'total time wasted: {end - start}')
+        # print('Analog JAM :0')
+        #
+        # if self._mod_move == 'press':
+        #
+        #     pass
+        #
+        # if self._mod_move == 'hold':
+        #
+        #     def hold_press(button):
+        #         press(button)
+        #
+        #     # for debug/measuring fn accuracy
+        #     start = time.time()
+        #
+        #     timer = RepeatedTimer(0.01, hold_press, self._move)
+        #     try:
+        #         sleep(self._mod_value)
+        #     finally:
+        #         timer.stop()
+        #
+        #         # for debug/measuring fn accuracy
+        #         end = time.time()
+        #     # for debug / measuring fn accuracy
+        #     print(f'total time wasted: {end - start}')
 
         pass
 
