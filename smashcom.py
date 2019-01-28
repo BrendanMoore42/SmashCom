@@ -9,8 +9,8 @@ import sys
 import time
 import keyboard
 import speech_recognition as sr
-from Mods.Controllers.controller import Controller
-from Mods.DirectKeys.directkeys import *
+from Mods.Controllers.Controller import MyController
+# from Mods.DirectKeys.directkeys import *
 
 #instantiate Recognizer class
 r = sr.Recognizer()
@@ -23,9 +23,10 @@ class SmashCom():
     standard controller.
     """
 
-    def __init__(self, controller, game):
-        self.controller = controller
-        self.game = game
+    def __init__(self): #, controller, game):
+        # self.controller = controller
+        # self.game = game
+        self.lets_go()
 
 
     def lets_go(self):
@@ -37,7 +38,7 @@ class SmashCom():
             try:
                 # Record audio
                 if keyboard.is_pressed('r'):
-                    self.show_me_your_moves(self.controller, self.game)
+                    self.show_me_your_moves()
                     break
                 # Quit program
                 if keyboard.is_pressed('q'):
@@ -47,7 +48,7 @@ class SmashCom():
         self.lets_go()
 
 
-    def show_me_your_moves(self, controller, game):
+    def show_me_your_moves(self):
         """
         Opens microphone to take speech then send to controller for function
         """
@@ -64,7 +65,9 @@ class SmashCom():
                 print(moves)
 
                 # run main fn
-               # player = Controller(moves=moves, execute=False)#, move=move, direction=direction, modifier=modifier, mod_move=mod_move, mod_time=mod_time)
+                print('sup')
+                player = MyController(moves=moves)#, move=move, direction=direction, modifier=modifier, mod_move=mod_move, mod_time=mod_time)
+                player.
                 # execute_moves(moves=moves)
             except:
                 pass
@@ -96,5 +99,4 @@ def main(args):
 if __name__ == '__main__':
     # temp_args = ['smashcom.py', 'ssbm']
     # main(temp_args)
-    sc = SmashCom()
-    sc.lets_go()
+    SmashCom()

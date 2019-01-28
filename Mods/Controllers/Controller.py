@@ -16,7 +16,7 @@ from threading import Timer
 #need to figure out this input problem
 from pynput.keyboard import Key, Controller
 from pyautogui import press, keyDown, keyUp, typewrite, hotkey
-from DirectKeys.directkeys import *
+# from DirectKeys.directkeys import *
 # from Mods.Controllers.gamecube import GC_Controller
 
 
@@ -37,6 +37,7 @@ class MyController():
         self._mod_move = None # extra move if required
         self._mod_value = 0 # can represent number operations for seconds or multiple inputs as required
         self.execute = True # debug for testing
+        print('Class initialized', self.moves)
 
         # Add to button/analog list to modify/add inputs
         self.buttons = {'button': ['a_press', 'b_press', 'x', 'y', 'l1', 'l2', 'r1' 'r2', 'z']}
@@ -66,7 +67,7 @@ class MyController():
         self._replace_phrases()  # Replace mod phrases in self.moves with key phrases
 
         # Example: hold up for four seconds
-        self.modifiers = {'inputs': ['wait', 'hold', 'press', 'hit', ],
+        self.modifiers = {'inputs': ['wait', 'hold', 'press', 'hit',],
                           'multiplier': ['times', 'once', 'twice', 'thrice', 'half', 'quarter'], # if half, make 1 and then half as a boolean in function call when hold is called
                           'pointer': ['side', 'smash', 'tilt', 'flick'],
                           'direction': ['up', 'down', 'left', 'right', 'centre', 'center'],
@@ -86,6 +87,7 @@ class MyController():
 
         # Execute moves
         if self.execute:
+            print(f'Print test: {self.moves}')
             # Split moves on the actionable split phrases
             for move in self.moves.split('action_split'):
                 self._execute_moves(move.lstrip())
@@ -235,8 +237,6 @@ class MyController():
         print(f'Button to press: {self._move}')
         self._move = self._direct_buttons[self._move]
 
-        # def analog_input():
-        #     pass
 
         def press_key():
 
@@ -430,16 +430,16 @@ class RepeatedTimer(object):
     def stop(self):
         self._timer.cancel()
         self.is_running = False
-
-moves = "press stick left for four seconds then d-pad up twice then hold b button for six seconds and then then stick up right then like flick c stick down then ride the bull then enter the konami code"
+#
+# moves = "press stick left for four seconds then d-pad up twice then hold b button for six seconds and then then stick up right then like flick c stick down then ride the bull then enter the konami code"
 moves1 = "press b button 2 times"
-move = "stick"
-direction = "left" # if not defined will default to last direction called
-modifier = "press"
-mod_move = "shield"
-mod_time = 10
-
-time.sleep(2)
+# move = "stick"
+# direction = "left" # if not defined will default to last direction called
+# modifier = "press"
+# mod_move = "shield"
+# mod_time = 10
+#
+# time.sleep(2)
 player = MyController(moves=moves1)
 
 # press('d', pause=20)
